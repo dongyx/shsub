@@ -1,0 +1,10 @@
+shsub - substitute embedded shell commands and expressions with their
+outputs and results
+
+usage: shsub [<options>]
+
+options:
+
+-s <sh>	specify the shell, by default `sh'
+-h	print brief usage
+-v	print version information

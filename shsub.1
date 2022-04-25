@@ -1,0 +1,110 @@
+.TH shsub 1
+
+.SH NAME
+
+shsub - substitute embedded shell commands and expressions with their
+outputs and results
+
+.SH SYNOPSIS
+
+.B shsub
+[
+.I options
+]
+
+.SH DESCRIPTION
+
+.PP
+.B shsub
+reads the shell template from stdin,
+and prints the result to stdout.
+
+.PP
+A shell template is text
+with shell commands and expressions embedded in.
+
+.PP
+The shell commands are surrounded by
+.B <%
+and
+.B %>\c
+\&.
+Each
+.B <%\c
+.I cmd\c
+.B %>
+is substituted by the output of the command
+.I cmd\c
+\&.
+
+.PP
+Ordinary text is converted to the command printing that text,
+then the command is substituted by its output.
+Thus control structure can be used in shell commands.
+
+.PP
+The shell expressions are surrounded by
+.B <%=
+and
+.B %>\c
+\&.
+Each
+.B <%=\c
+.I expr\c
+.B %>
+is substituted by the output of the command
+.B printf %s \[dq]\c
+.I expr\c
+.B \[dq]\c
+\&.
+Double quotes in
+.I expr
+are automatically escaped by
+.B
+shsub\c
+\&.
+
+.PP
+.B <%%
+and
+.B %%>
+are escape tokens converting to literal
+.B <%
+and
+.B %>\c
+\&.
+
+.PP
+If
+.B -%>
+is used instead of
+.B %>\c
+,
+.B shsub
+deletes the last newline of the output if there is one.
+.B -%>
+pipes the output of the command to a program
+deleting the potential newline.
+Thus the command must be in a limited form that can be
+succeeded by a pipe.
+
+.SH OPTIONS
+
+.TP
+\fB\-s\fR \fIshell\fR
+Set which shell is used.
+By default,
+.B shsub
+searches
+.B sh
+in
+.B $PATH\c
+\&.
+
+.TP
+.B \-h
+Print the brief usage.
+
+.TP
+.B \-v
+Print the version information.
