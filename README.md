@@ -3,7 +3,7 @@ shsub
 
 The shsub utility is a template engine using the shell language.
 
-The following file is a simple shell template:
+The following file `lsnotes.html` is a simple shell template:
 
 	<ul>
 		<%for i in notes/*.md; do%>
@@ -16,13 +16,13 @@ The following file is a simple shell template:
 		<%done%>
 	</ul>
 
-Running `shsub` on it prints a HTML list reporting titles of your
-Markdown notes.
+Running `shsub < lsnotes.html` prints a HTML list reporting titles of
+your Markdown notes.
 
 INSTALLATION
 ------------
 
-To install `shsub` execute the following command in the source tree:
+To install `shsub`, execute the following command in the source tree:
 
 	$ sudo make install
 
