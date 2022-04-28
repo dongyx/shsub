@@ -6,5 +6,5 @@ usage: shsub [<options>]
 options:
 
 -s <sh>	specify the shell, by default `sh'
--h	print brief usage
--v	print version information
+-h	print the brief usage
+-v	print the version information
