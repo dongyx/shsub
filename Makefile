@@ -1,4 +1,4 @@
-.PHONY: all install clean
+.PHONY: all install test clean
 
 prefix		= /usr/local
 exec_prefix	= $(prefix)
@@ -21,6 +21,19 @@ install: shsub tc
 	$(INSTALL) tc $(libexecdir)/shsub/
 	cp shsub.1 $(mandir)/man1/
 
+test: prefix = testenv
+test: install
+	@set -e; \
+	for in in test/*.in; do \
+		bname=`basename $${in%%.*}`; \
+		echo running test $${bname}...; \
+		out=testenv/$${bname}.out; \
+		ans=test/$${bname}.out; \
+		<$$in testenv/bin/shsub >$$out; \
+		diff -u $$ans $$out; \
+	done; \
+	echo all tests passed
+
 shsub: shsub.m4 version usage LICENSE
 	m4 \
 		-Dm4_libexecdir=$(libexecdir) \
@@ -33,4 +46,4 @@ tc: tc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f shsub tc
+	rm -rf shsub tc testenv
