@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #define TOKSIZ 8
+
 enum error { ESYS = 1, ESYNTAX };
-enum state { SERR, SINIT, STXT, SCMD, SEXP, STERM };
 enum token {
 	OPENCMD,	/* <%	*/
 	OPENEXP,	/* <%=	*/
@@ -15,7 +15,7 @@ enum token {
 	TXT,		/* text	*/
 	END		/* EOF	*/
 };
-
+enum state { SERR, SINIT, STXT, SCMD, SEXP, STERM };
 enum state sttab[][8] = {
 /* in/st	  ERR	INIT	TXT	CMD	EXP	TERM	*/
 
@@ -28,7 +28,6 @@ enum state sttab[][8] = {
 /* TXT     */	{ SERR,	STXT,	STXT,	SCMD,	SEXP,	SERR	},
 /* END     */	{ SERR,	STERM,	STERM,	SERR,	SERR,	SERR	}
 };
-
 void entrtxt(enum state from, enum token in);
 void entrcmd(enum state from, enum token in);
 void entrexp(enum state from, enum token in);
@@ -36,7 +35,7 @@ void entrerr(enum state from, enum token in);
 void exittxt(enum state to, enum token in);
 void exitcmd(enum state to, enum token in);
 void exitexp(enum state to, enum token in);
-
+void trim(void);
 void (*entrtab[])(enum state, enum token) = {
 	&entrerr, NULL, &entrtxt, &entrcmd, &entrexp, NULL
 };
@@ -45,11 +44,15 @@ void (*exittab[])(enum state, enum token) = {
 };
 
 int cstack[TOKSIZ], cssize;
+int popc(void);
+int pushc(int c);
+
 char token[TOKSIZ];
+enum token gettok(void);
+int dryread(char *s);
 
 main()
 {
-	enum token gettok();
 	enum state st, next;
 	enum token in;
 
@@ -115,14 +118,6 @@ void exittxt(enum state to, enum token in)
 		puts("'");
 }
 
-void trim(void)
-{
-	fputs(
-		"|awk " "'NR>1{print p}{p=$0}END{printf(\"%s\",p)}'",
-		stdout
-	);
-}
-
 void exitcmd(enum state to, enum token in)
 {
 	if (to == SCMD)
@@ -142,32 +137,10 @@ void exitexp(enum state to, enum token in)
 	putchar('\n');
 }
 
-pushc(int c)
+void trim(void)
 {
-	return cstack[cssize++] = c;
-}
-
-popc(void)
-{
-	return cssize > 0 ? cstack[--cssize] : getchar();
-}
-
-dryread(char *s)
-{
-	char *p, c;
-	int ret;
-
-	ret = 1;
-	p = s;
-	while (*p && (c = popc()) == *p)
-		p++;
-	if (*p) {
-		ret = 0;
-		pushc(c);
-	}
-	while (p != s)
-		pushc(*--p);
-	return ret;
+	fputs("|awk 'NR>1{print p}{p=$0}END{printf(\"%s\",p)}'",
+		stdout);
 }
 
 enum token gettok(void)
@@ -196,4 +169,32 @@ enum token gettok(void)
 	token[0] = popc();
 	token[1] = '\0';
 	return token[0] == EOF ? END : TXT;
+}
+
+int pushc(int c)
+{
+	return cstack[cssize++] = c;
+}
+
+int popc(void)
+{
+	return cssize > 0 ? cstack[--cssize] : getchar();
+}
+
+int dryread(char *s)
+{
+	char *p, c;
+	int ret;
+
+	ret = 1;
+	p = s;
+	while (*p && (c = popc()) == *p)
+		p++;
+	if (*p) {
+		ret = 0;
+		pushc(c);
+	}
+	while (p != s)
+		pushc(*--p);
+	return ret;
 }
