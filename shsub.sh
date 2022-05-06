@@ -1,4 +1,11 @@
 #!/bin/sh
+#
+# the user interface of shsub <https:/github.com/dongyx/shsub>
+# piping the output of tc to shell
+#
+# tokens surrounded by `__`, like `__version__`
+# is intended to be substituted at building time
+# using a macro processor like m4 .
 
 set -e
 tc="$(dirname "$0")/tc"

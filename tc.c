@@ -1,3 +1,12 @@
+/* tc - compile the shell template to a shell script
+ *
+ * the shell template is read from stdin
+ * the shell script is printed to stdout
+ *
+ * tc is a component of the shsub project
+ * <https://github.com/dongyx/shsub>
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
