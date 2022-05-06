@@ -39,7 +39,7 @@ test: all
 	done; \
 	echo all tests passed
 
-shsub: shsub.sh version usage LICENSE
+shsub: shsub.sh usage LICENSE
 	m4 \
 		-D__version__='$(version)' \
 		-D__license__="`cat LICENSE`" \
