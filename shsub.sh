@@ -1,22 +1,22 @@
 #!/bin/sh
 
 set -e
-tc="m4_libexecdir/shsub/tc"
-sh=sh
+tc="$(dirname "$0")/tc"
+sh=/bin/sh
 
 while getopts 's:hv' opt; do
 	case $opt in
 		s) sh="$OPTARG";;
 		h)
 			cat <<-'.'
-			m4_usage
+			__usage__
 			.
 			exit;;
 		v)
 			cat <<-'.'
-			shsub m4_version
+			shsub __version__
 
-			m4_license
+			__license__
 			.
 			exit;;
 	esac
