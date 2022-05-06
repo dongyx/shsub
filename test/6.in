@@ -1,0 +1,4 @@
+%>
+<%
+<% echo hello world %>
+%> this line has an error

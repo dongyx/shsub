@@ -1,6 +1,5 @@
 .PHONY: all install test clean
 
-version		= 0.0.0
 prefix		= /usr/local
 exec_prefix	= $(prefix)
 bindir		= $(exec_prefix)/bin
@@ -33,15 +32,18 @@ test: all
 		bname=`basename $${in%%.*}`; \
 		echo running test $${bname}...; \
 		out=testenv/$${bname}.out; \
-		ans=test/$${bname}.out; \
-		<$$in ./shsub >$$out; \
-		diff -u $$ans $$out; \
+		err=testenv/$${bname}.err; \
+		ansout=test/$${bname}.out; \
+		anserr=test/$${bname}.err; \
+		<$$in ./shsub >$$out 2>$$err; \
+		[ -f $$ansout ] && diff -u $$ansout $$out; \
+		[ -f $$anserr ] && diff -u $$anserr $$err; \
 	done; \
 	echo all tests passed
 
-shsub: shsub.sh usage LICENSE
+shsub: shsub.sh usage LICENSE version
 	m4 \
-		-D__version__='$(version)' \
+		-D__version__="`cat version`" \
 		-D__license__="`cat LICENSE`" \
 		-D__usage__="`cat usage`" \
 		shsub.sh > shsub

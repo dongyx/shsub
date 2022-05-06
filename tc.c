@@ -56,6 +56,7 @@ int cstack[TOKSIZ], cssize;
 int popc(void);
 int pushc(int c);
 
+int lineno = 1;
 char token[TOKSIZ];
 enum token gettok(void);
 int dryread(char *s);
@@ -68,6 +69,8 @@ main()
 	puts("set -e");
 	for (st = SINIT; st != STERM && st != SERR; st = next) {
 		in = gettok();
+		if (token[0] == '\n')
+			lineno++;
 		if (in == ESCOPEN)
 			strcpy(token, "<%");
 		if (in == ESCCLS)
@@ -117,7 +120,8 @@ void entrexp(enum state from, enum token in)
 
 void entrerr(enum state from, enum token in)
 {
-	fprintf(stderr, "illegal token: %s", token);
+	fprintf(stderr, "shsub: illegal token %s at line %d\n",
+		token, lineno);
 	exit(ESYNTAX);
 }
 
