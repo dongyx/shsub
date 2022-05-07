@@ -3,7 +3,7 @@ shsub
 
 The shsub utility is a template engine using the shell language.
 
-The following file `lsnotes.html` is a simple shell template:
+The following file `lsnotes.html.st` is a simple shell template:
 
 	<ul>
 		<%for i in notes/*.md; do%>
@@ -16,7 +16,7 @@ The following file `lsnotes.html` is a simple shell template:
 		<%done%>
 	</ul>
 
-Running `shsub < lsnotes.html` prints a HTML list reporting titles of
+Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
 your Markdown notes.
 
 INSTALLATION
@@ -45,7 +45,8 @@ and any other supporting files of `shsub` would be installed to
 USAGE
 -----
 
-`shsub` is a simple Unix filter
-reading from stdin and printing to stdout.
+`shsub` \[*options*\] \[*file*\]
 
-Type `man shsub` for available options and the template syntax.
+If *file* is omitted, read from stdin.
+
+Type `man shsub` for detail.

@@ -28,4 +28,9 @@ while getopts 's:hv' opt; do
 			exit;;
 	esac
 done
-"$tc" | "$sh"
+shift $(($OPTIND - 1))
+if [ $# -gt 0 ]; then
+	<"$1" "$tc" | "$sh"
+else
+	"$tc" | "$sh"
+fi

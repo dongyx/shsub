@@ -11,13 +11,21 @@ outputs and results
 [
 .I options
 ]
+[
+.I file
+]
 
 .SH DESCRIPTION
 
 .PP
 .B shsub
-reads the shell template from stdin,
+reads the shell template from
+.I file
+,
 and prints the result to stdout.
+If
+.I file
+is omitted, read from stdin.
 
 .PP
 A shell template is text
