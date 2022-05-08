@@ -8,6 +8,17 @@
 # using a macro processor like m4 .
 
 set -e
+
+cleanup() {
+	[ -p "$fifo" ] && rm "$fifo"
+	if [ -n $tcpid ]; then
+		ppid="$(ps -p$tcpid -oppid | awk 'NR>1{print $1}')"
+		[ "$ppid" = $$ ] && kill "$ppid"
+	fi
+	wait
+	exit $1
+}
+
 tc="$(dirname "$0")/tc"
 sh=/bin/sh
 
@@ -29,8 +40,15 @@ while getopts 's:hv' opt; do
 	esac
 done
 shift $(($OPTIND - 1))
+
 if [ $# -gt 0 ]; then
-	<"$1" "$tc" | "$sh"
+	fifo=$(mktemp -u)
+	mkfifo -m600 "$fifo"
+	"$tc" <"$1" >"$fifo" & tcpid=$!
+	trap "cleanup 0" EXIT
+	trap "cleanup $((128 + 15))" TERM
+	trap "cleanup $((128 + 2))" INT
+	"$sh" "$fifo"
 else
 	"$tc" | "$sh"
 fi

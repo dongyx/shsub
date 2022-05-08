@@ -7,43 +7,20 @@ outputs and results
 
 .SH SYNOPSIS
 
-.B shsub
-[
-.I options
-]
-[
-.I file
-]
+\fBshsub\fR [\fIoptions\fR] [\fIfile\fR\]
 
 .SH DESCRIPTION
-
-.PP
-.B shsub
-reads the shell template from
-.I file
-,
-and prints the result to stdout.
-If
-.I file
-is omitted, read from stdin.
 
 .PP
 A shell template is text
 with shell commands and expressions embedded in.
 
 .PP
-The shell commands are surrounded by
-.B <%
-and
-.B %>\c
-\&.
-Each
-.B <%\c
-.I cmd\c
-.B %>
-is substituted by the output of the command
-.I cmd\c
-\&.
+The shell commands are surrounded by \fB<%\fR and \fB%>\fR.
+
+.PP
+Each \fB<%\fIcmd\fB%>\fR is substituted
+with the output of the command.
 
 .PP
 Ordinary text is converted to the command printing that text,
@@ -51,50 +28,35 @@ then the command is substituted by its output.
 Thus control structure can be used in shell commands.
 
 .PP
-The shell expressions are surrounded by
-.B <%=
-and
-.B %>\c
-\&.
-Each
-.B <%=\c
-.I expr\c
-.B %>
-is substituted by the output of the command
-.B printf %s \[dq]\c
-.I expr\c
-.B \[dq]\c
-\&.
-Double quotes in
-.I expr
-are automatically escaped by
-.B
-shsub\c
-\&.
+The shell expressions are surrounded by \fB<%=\fR and \fB%>\fR.
 
 .PP
-.B <%%
-and
-.B %%>
-are escape tokens converting to literal
-.B <%
-and
-.B %>\c
-\&.
+Each \fB<%=\fIexpr\fB%>\fR is substituted with
+the output of the command \fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
+Double quotes in \fIexpr\fR are automatically escaped by \fBshsub\fR.
 
 .PP
-If
-.B -%>
-is used instead of
-.B %>\c
-,
-.B shsub
-deletes the last newline of the output if there is one.
-.B -%>
-pipes the output of the command to a program
+\fB<%%\fR and \fB%%>\fR are escape tokens representing
+literal \fB<%\fR and \fB%>\fR.
+
+.PP
+If \fB-%>\fR is used instead of \fB%>\fR,
+\fBshsub\fR deletes the last newline of the output if there is one.
+\fB-%>\fR pipes the output of the command to a program
 deleting the potential newline.
 Thus the command must be in a limited form that can be
 succeeded by a pipe.
+
+.PP
+\fBshsub\fR reads the shell template from \fIfile\fR,
+and prints the result to stdout.
+If \fIfile\fR is omitted, read from stdin.
+
+.SH CAVEATS
+
+When \fBshsub\fR reads from stdin,
+and the shell template contains commands reading from stdin,
+e.g. \fBread\fR(1), the behavior is unspecific.
 
 .SH OPTIONS
 
@@ -102,10 +64,7 @@ succeeded by a pipe.
 \fB\-s\fR \fIshell\fR
 Set which shell is used.
 By default,
-.B shsub
-uses
-.B /bin/sh\c
-\&.
+\fBshsub\fR uses \fB/bin/sh\fR.
 
 .TP
 .B \-h
