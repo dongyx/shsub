@@ -22,25 +22,12 @@ your Markdown notes.
 INSTALLATION
 ------------
 
-To install `shsub`, execute the following command in the source tree:
+Execute the following commands in the source tree:
 
+	$ make
 	$ sudo make install
 
-It installs `shsub` to `/usr/local` which is the most common location
-for local programs in Unix variants.
-
-Installing `shsub` to the home directory is more complicated,
-because the structure of the home directory is quite a personal
-taste. Supposing your personal executable files are placed in
-`~/bin` and your personal man pages are placed in `~/man`,
-the following setting would be a common way to install `shsub` to
-the home directory.
-
-	$ make install prefix=~/.shsub bindir=~/bin mandir=~/man
-
-It installs the executable files in `~/bin`, man pages in `~/man`,
-and any other supporting files of `shsub` would be installed to
-`~/.shsub`.
+It installs `shsub` to `/usr/local` by default.
 
 USAGE
 -----
