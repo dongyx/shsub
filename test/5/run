@@ -1,0 +1,4 @@
+#!/bin/sh
+
+shsub <in >/dev/null 2>anserr
+diff err anserr

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo hello world | shsub in >ansout
+diff out ansout

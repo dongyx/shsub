@@ -1,0 +1,4 @@
+#!/bin/sh
+
+shsub <in >ansout
+diff out ansout

@@ -27,17 +27,16 @@ install: all
 
 test: all
 	@set -e; \
-	mkdir -p testenv; \
-	for in in test/*.in; do \
-		bname=`basename $${in%%.*}`; \
-		echo running test $${bname}...; \
-		out=testenv/$${bname}.out; \
-		err=testenv/$${bname}.err; \
-		ansout=test/$${bname}.out; \
-		anserr=test/$${bname}.err; \
-		<$$in ./shsub >$$out 2>$$err; \
-		[ -f $$ansout ] && diff -u $$ansout $$out; \
-		[ -f $$anserr ] && diff -u $$anserr $$err; \
+	rm -rf testenv; \
+	cp -R test testenv; \
+	for t in testenv/*; do \
+		echo running test $$t...; \
+		( \
+			PATH="`pwd`:$$PATH"; \
+			cd $$t; \
+			chmod +x run; \
+			./run \
+		); \
 	done; \
 	echo all tests passed
 
