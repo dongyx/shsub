@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo hello world | shsub in >ansout
+echo hello world | cli in >ansout
 diff out ansout

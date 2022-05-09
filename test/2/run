@@ -1,4 +1,4 @@
 #!/bin/sh
 
-shsub <in >ansout
+cli <in >ansout
 diff out ansout

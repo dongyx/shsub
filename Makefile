@@ -3,7 +3,7 @@
 prefix		= /usr/local
 exec_prefix	= $(prefix)
 bindir		= $(exec_prefix)/bin
-libexecdir	= $(exec_prefix)/libexec
+libdir		= $(exec_prefix)/lib
 datarootdir	= $(prefix)/share
 mandir		= $(datarootdir)/man
 
@@ -11,19 +11,14 @@ CC		= cc
 CFLAGS		= -ansi -pedantic-errors -Wno-error=all
 INSTALL		= install
 
-all: shsub tc
+all: cli tc
 
 install: all
-	mkdir -p $(bindir)
-	mkdir -p $(libexecdir)/shsub
-	mkdir -p $(mandir)/man1
-	$(INSTALL) -m 755 shsub $(libexecdir)/shsub/
-	$(INSTALL) -m 755 tc $(libexecdir)/shsub/
-	cp shsub.1 $(mandir)/man1/
-	echo '#!/bin/sh' > $(bindir)/shsub
-	echo >> $(bindir)/shsub
-	echo $(libexecdir)/shsub/shsub '"$$@"' >> $(bindir)/shsub
-	chmod 755 $(bindir)/shsub
+	$(INSTALL) -d $(bindir) $(libdir)/shsub $(mandir)/man1
+	$(INSTALL) cli tc $(libdir)/shsub/
+	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
+	m4 -D__libdir__=`echo $(libdir)` shsub.sh > shsub
+	$(INSTALL) shsub $(bindir)/
 
 test: all
 	@set -e; \
@@ -40,16 +35,15 @@ test: all
 	done; \
 	echo all tests passed
 
-shsub: shsub.sh usage LICENSE version
-	m4 \
-		-D__version__="`cat version`" \
+cli: cli.sh usage LICENSE version
+	m4	-D__version__="`cat version`" \
 		-D__license__="`cat LICENSE`" \
 		-D__usage__="`cat usage`" \
-		shsub.sh > shsub
-	chmod +x shsub
+		cli.sh > cli
+	chmod +x cli
 
 tc: tc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf shsub tc testenv
+	rm -rf cli shsub tc testenv
