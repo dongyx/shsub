@@ -1,7 +1,7 @@
 shsub
 =====
 
-The shsub utility is a template engine using the shell language.
+*shsub* is a template engine of the shell language.
 
 The following file `lsnotes.html.st` is a simple shell template:
 
@@ -22,7 +22,10 @@ your Markdown notes.
 INSTALLATION
 ------------
 
-Execute the following commands in the source tree:
+Download the source tarball of the preferred version from
+the [release list](https://github.com/dongyx/shsub/releases).
+Unpack the tarball and
+execute the following commands in the source tree:
 
 	$ make
 	$ sudo make install
@@ -34,6 +37,6 @@ USAGE
 
 `shsub` \[*options*\] \[*file*\]
 
-If *file* is omitted, read from stdin.
-
-Type `man shsub` for detail.
+If *file* is omitted, `shsub` reads the template from stdin.
+Complete options and the template syntax is documented in
+the man page `shsub`(1).
