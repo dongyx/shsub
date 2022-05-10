@@ -11,9 +11,10 @@
 #include <string.h>
 #include <stdio.h>
 
+#define MAXEXPR 8192
 #define TOKSIZ 8
 
-enum error { ESYS = 1, ESYNTAX };
+enum error { ESYS = 1, ESYNTAX, ELIM };
 enum token {
 	OPENCMD,	/* <%	*/
 	OPENEXP,	/* <%=	*/
@@ -44,7 +45,6 @@ void entrerr(enum state from, enum token in);
 void exittxt(enum state to, enum token in);
 void exitcmd(enum state to, enum token in);
 void exitexp(enum state to, enum token in);
-void trim(void);
 void (*entrtab[])(enum state, enum token) = {
 	&entrerr, NULL, &entrtxt, &entrcmd, &entrexp, NULL
 };
@@ -57,6 +57,7 @@ int popc(void);
 int pushc(int c);
 
 int lineno = 1;
+char exprbuf[MAXEXPR], *pexpr;
 char token[TOKSIZ];
 enum token gettok(void);
 int dryread(char *s);
@@ -65,12 +66,19 @@ main()
 {
 	enum state st, next;
 	enum token in;
+	int trim;
 
+	trim = 0;
 	puts("set -e");
 	for (st = SINIT; st != STERM && st != SERR; st = next) {
 		in = gettok();
-		if (token[0] == '\n')
+		if (token[0] == '\n') {
 			lineno++;
+			if (trim) {
+				trim = 0;
+				continue;
+			}
+		}
 		if (in == ESCOPEN)
 			strcpy(token, "<%");
 		if (in == ESCCLS)
@@ -80,6 +88,7 @@ main()
 			exittab[st](next, in);
 		if (entrtab[next])
 			entrtab[next](st, in);
+		trim = in == TRIMCLS;
 	}
 	return 0;
 }
@@ -106,21 +115,48 @@ void entrcmd(enum state from, enum token in)
 void entrexp(enum state from, enum token in)
 {
 	char *s;
+	int len;
 
-	if (from != SEXP)
+	if (from != SEXP) {
 		fputs("printf %s \"", stdout);
+		pexpr = exprbuf;
+	}
 	if (in == OPENEXP)
 		return;
-	for (s = token; *s; s++)
+	len = pexpr - exprbuf;
+	pexpr = stpncpy(pexpr, token, MAXEXPR - len - 1);
+	if (pexpr >= &exprbuf[MAXEXPR]) {
+		fprintf(
+			stderr,
+			"shsub: expression at line %d "
+			"exceeds the maximum length %d\n",
+			lineno,
+			MAXEXPR - 1
+		);
+		exit(ELIM);
+	}
+}
+
+void exitexp(enum state to, enum token in)
+{
+	static char *spaces = " \t";
+	char *s;
+
+	if (to == SEXP)
+		return;
+	while (strchr(spaces, *--pexpr))
+		;
+	for (s = &exprbuf[strspn(exprbuf, spaces)]; s <= pexpr; s++)
 		if (*s == '"')
 			fputs("\\\"", stdout);
 		else
 			putchar(*s);
+	puts("\"");
 }
 
 void entrerr(enum state from, enum token in)
 {
-	fprintf(stderr, "shsub: illegal token %s at line %d\n",
+	fprintf(stderr, "shsub: unexpected token %s at line %d\n",
 		token, lineno);
 	exit(ESYNTAX);
 }
@@ -135,25 +171,7 @@ void exitcmd(enum state to, enum token in)
 {
 	if (to == SCMD)
 		return;
-	if (in == TRIMCLS)
-		trim();
 	putchar('\n');
-}
-
-void exitexp(enum state to, enum token in)
-{
-	if (to == SEXP)
-		return;
-	putchar('"');
-	if (in == TRIMCLS)
-		trim();
-	putchar('\n');
-}
-
-void trim(void)
-{
-	fputs("|awk 'NR>1{print p}{p=$0}END{printf(\"%s\",p)}'",
-		stdout);
 }
 
 enum token gettok(void)

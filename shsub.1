@@ -9,6 +9,11 @@ outputs and results
 
 \fBshsub\fR [\fIoptions\fR] [\fIfile\fR\]
 
+.PP
+\fBshsub\fR reads the shell template from \fIfile\fR,
+and prints the result to stdout.
+If \fIfile\fR is omitted, \fBshsub\fR reads from stdin.
+
 .SH DESCRIPTION
 
 .PP
@@ -33,7 +38,8 @@ The shell expressions are surrounded by \fB<%=\fR and \fB%>\fR.
 .PP
 Each \fB<%=\fIexpr\fB%>\fR is substituted with
 the output of the command \fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
-Double quotes in \fIexpr\fR are automatically escaped by \fBshsub\fR.
+Leading and trailing spaces and tabs of \fIexpr\fR are removed.
+Double quotes in \fIexpr\fR are automatically escaped.
 
 .PP
 \fB<%%\fR and \fB%%>\fR are escape tokens representing
@@ -41,16 +47,7 @@ literal \fB<%\fR and \fB%>\fR.
 
 .PP
 If \fB-%>\fR is used instead of \fB%>\fR,
-\fBshsub\fR deletes the last newline of the output if there is one.
-\fB-%>\fR pipes the output of the command to a program
-deleting the potential newline.
-Thus the command must be in a limited form that can be
-succeeded by a pipe.
-
-.PP
-\fBshsub\fR reads the shell template from \fIfile\fR,
-and prints the result to stdout.
-If \fIfile\fR is omitted, read from stdin.
+\fBshsub\fR trims the following newline.
 
 .SH CAVEATS
 

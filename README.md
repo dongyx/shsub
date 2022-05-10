@@ -6,14 +6,14 @@ shsub
 The following file `lsnotes.html.st` is a simple shell template:
 
 	<ul>
-		<%for i in notes/*.md; do%>
-			<%title=`grep '^# ' "$i" | head -n1`%>
-			<%if [ -n "$title" ]; then%>
+		<% for i in notes/*.md; do -%>
+			<% title=`grep '^# ' "$i" | head -n1` -%>
+			<% if [ -n "$title" ]; then -%>
 				<li>
-					<%=$title%>
+					<%= $title %>
 				</li>
-			<%fi%>
-		<%done%>
+			<% fi -%>
+		<% done -%>
 	</ul>
 
 Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
