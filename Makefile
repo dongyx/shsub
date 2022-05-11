@@ -46,4 +46,4 @@ tc: tc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf cli shsub tc testenv
+	rm -rf cli shsub tc testenv *.dSYM

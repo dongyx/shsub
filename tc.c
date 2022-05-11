@@ -115,16 +115,15 @@ void entrcmd(enum state from, enum token in)
 void entrexp(enum state from, enum token in)
 {
 	char *s;
-	int len;
 
 	if (from != SEXP) {
 		fputs("printf %s \"", stdout);
 		pexpr = exprbuf;
+		*pexpr = '\0';
 	}
 	if (in == OPENEXP)
 		return;
-	len = pexpr - exprbuf;
-	pexpr = stpncpy(pexpr, token, MAXEXPR - len - 1);
+	pexpr = stpncpy(pexpr, token, MAXEXPR - (pexpr - exprbuf));
 	if (pexpr >= &exprbuf[MAXEXPR]) {
 		fprintf(
 			stderr,
@@ -139,14 +138,14 @@ void entrexp(enum state from, enum token in)
 
 void exitexp(enum state to, enum token in)
 {
-	static char *spaces = " \t";
+	static char *spaces = " \t\n";
 	char *s;
 
 	if (to == SEXP)
 		return;
-	while (strchr(spaces, *--pexpr))
-		;
-	for (s = &exprbuf[strspn(exprbuf, spaces)]; s <= pexpr; s++)
+	while (pexpr > exprbuf && strchr(spaces, *(pexpr - 1)))
+		pexpr--;
+	for (s = &exprbuf[strspn(exprbuf, spaces)]; s < pexpr; s++)
 		if (*s == '"')
 			fputs("\\\"", stdout);
 		else

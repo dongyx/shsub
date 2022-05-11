@@ -38,7 +38,7 @@ The shell expressions are surrounded by \fB<%=\fR and \fB%>\fR.
 .PP
 Each \fB<%=\fIexpr\fB%>\fR is substituted with
 the output of the command \fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
-Leading and trailing spaces and tabs of \fIexpr\fR are removed.
+Leading and trailing spaces, tabs, and newlines of \fIexpr\fR are removed.
 Double quotes in \fIexpr\fR are automatically escaped.
 
 .PP
