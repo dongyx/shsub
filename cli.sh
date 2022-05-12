@@ -24,7 +24,7 @@ sh=/bin/sh
 
 while getopts 's:hv' opt; do
 	case $opt in
-		s) sh="$OPTARG";;
+		s)	sh="$OPTARG";;
 		h)
 			cat <<-'.'
 			__usage__
@@ -37,6 +37,10 @@ while getopts 's:hv' opt; do
 			__license__
 			.
 			exit;;
+		?)
+			echo type `\`shsub -h\'' for the brief usage
+			echo 'read the man page shsub(1) for detail'
+			exit 1;;
 	esac
 done
 shift $(($OPTIND - 1))
