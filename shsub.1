@@ -49,6 +49,11 @@ literal \fB<%\fR and \fB%>\fR.
 If \fB-%>\fR is used instead of \fB%>\fR,
 \fBshsub\fR trims the following newline.
 
+.PP
+If the first line of the shell template begins with
+\fB#!\fR (\fIshebang\fR), it will be ignored.
+This is for the convenience of making executable shell templates.
+
 .SH CAVEATS
 
 When \fBshsub\fR reads from stdin,

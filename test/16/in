@@ -1,0 +1,10 @@
+#!/usr/bin/env cli
+<%	foo=hello
+	bar=world
+	foobar=END
+-%>
+<%= 
+
+$foo %>, <%=%><%=$bar%>.<%= %> <%= $foobar 
+
+%>.

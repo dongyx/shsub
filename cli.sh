@@ -19,6 +19,10 @@ cleanup() {
 	exit $1
 }
 
+preproc() {
+	awk 'NR == 1 && /^#!/ { next } 1'	# ignore shebang
+}
+
 tc="$(dirname "$0")/tc"
 sh=/bin/sh
 
@@ -48,11 +52,11 @@ shift $(($OPTIND - 1))
 if [ $# -gt 0 ]; then
 	fifo=$(mktemp -u)
 	mkfifo -m600 "$fifo"
-	"$tc" <"$1" >"$fifo" & tcpid=$!
+	<"$1" preproc | "$tc" >"$fifo" & tcpid=$!
 	trap "cleanup 0" EXIT
 	trap "cleanup $((128 + 15))" TERM
 	trap "cleanup $((128 + 2))" INT
 	"$sh" "$fifo"
 else
-	"$tc" | "$sh"
+	preproc | "$tc" | "$sh"
 fi
