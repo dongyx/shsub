@@ -40,6 +40,9 @@ USAGE
 
 If *file* is omitted, `shsub` reads the template from stdin.
 
+TEMPLATE SYNTAX
+---------------
+
 - `<%`*cmd*`%>` is substituted with the output of *cmd*
 
 - `<%=`*expr*`%>` is substituted with the output of the command
