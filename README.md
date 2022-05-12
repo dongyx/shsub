@@ -49,6 +49,8 @@ USAGE
 
 If *file* is omitted, `shsub` reads the template from stdin.
 
+Available options are documented in the man page `shsub`(1).
+
 TEMPLATE SYNTAX
 ---------------
 
