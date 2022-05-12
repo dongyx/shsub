@@ -8,7 +8,10 @@ datarootdir	= $(prefix)/share
 mandir		= $(datarootdir)/man
 
 CC		= cc
-CFLAGS		= -ansi -pedantic-errors -Wno-error=all
+CFLAGS		= 	-ansi \
+			-D_POSIX_C_SOURCE=200809L \
+			-pedantic-errors \
+			-Wno-error=all
 INSTALL		= install
 
 all: cli tc
