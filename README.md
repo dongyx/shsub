@@ -39,5 +39,19 @@ USAGE
 `shsub` \[*options*\] \[*file*\]
 
 If *file* is omitted, `shsub` reads the template from stdin.
-Complete options and the template syntax is documented in
-the man page `shsub`(1).
+
+- `<%`*cmd*`%>` is substituted with the output of *cmd*
+
+- `<%=`*expr*`%>` is substituted with the output of the command
+`printf %s "`*expr*`"`. 
+
+	Leading and trailing spaces, tabs, and newlines of *expr*
+	are removed.
+	Double quotes in *expr* are automatically escaped.
+
+- `-%>` can be used instead of `%>` to trim the following newline
+
+- `<%%` and `%%>` are escape tokens representing literal `<%` and `%>`
+
+- if the first line of the shell template begins with `#!` (*shebang*),
+it will be ignored
