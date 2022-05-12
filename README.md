@@ -1,7 +1,8 @@
 shsub
 =====
 
-*shsub* is a template engine of the shell language.
+*shsub* is a template engine of the shell language,
+but mainly implemented in C.
 
 The following file `lsnotes.html.st` is a simple shell template:
 
