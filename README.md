@@ -31,7 +31,7 @@ execute the following commands in the source tree:
 	$ make
 	$ sudo make install
 
-It installs `shsub` to `/usr/local` by default.
+*shsub* is installed to `/usr/local` by default.
 
 Building *shsub* requires:
 
@@ -49,7 +49,15 @@ USAGE
 
 If *file* is omitted, `shsub` reads the template from stdin.
 
-Available options are documented in the man page `shsub`(1).
+options:
+
+- `-s` *sh*	specify the shell, '/bin/sh' by default
+- `-h`	print the brief usage
+- `-v`	print the version information
+
+The detailed information is documented in the man page `shsub`(1)
+which is included in the installation.
+You could read it anytime by typing `man shsub`.
 
 TEMPLATE SYNTAX
 ---------------
