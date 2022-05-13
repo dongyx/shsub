@@ -17,10 +17,10 @@ INSTALL		= install
 all: cli tc
 
 install: all
+	m4 -D__libdir__=`echo $(libdir)` shsub.sh > shsub
 	$(INSTALL) -d $(bindir) $(libdir)/shsub $(mandir)/man1
 	$(INSTALL) cli tc $(libdir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
-	m4 -D__libdir__=`echo $(libdir)` shsub.sh > shsub
 	$(INSTALL) shsub $(bindir)/
 
 test: all
