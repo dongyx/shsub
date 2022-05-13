@@ -23,7 +23,7 @@ your Markdown notes.
 INSTALLATION
 ------------
 
-Download the source tarball of the preferred version from
+Download the source tarball of the latest version from
 the [release list](https://github.com/dongyx/shsub/releases).
 Unpack the tarball and
 execute the following commands in the source tree:
