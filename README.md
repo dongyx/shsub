@@ -51,7 +51,7 @@ If *file* is omitted, `shsub` reads the template from stdin.
 
 options:
 
-- `-s` *sh*	specify the shell, '/bin/sh' by default
+- `-s` *sh*	specify the shell, `/bin/sh` by default
 - `-h`	print the brief usage
 - `-v`	print the version information
 
