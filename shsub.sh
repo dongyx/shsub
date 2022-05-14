@@ -1,3 +1,3 @@
 #!/bin/sh
 
-'__libdir__/shsub/cli' "$@"
+'__libexecdir__/shsub/cli' "$@"

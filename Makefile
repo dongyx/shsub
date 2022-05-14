@@ -3,7 +3,7 @@
 prefix		= /usr/local
 exec_prefix	= $(prefix)
 bindir		= $(exec_prefix)/bin
-libdir		= $(exec_prefix)/lib
+libexecdir	= $(exec_prefix)/libexec
 datarootdir	= $(prefix)/share
 mandir		= $(datarootdir)/man
 
@@ -17,9 +17,9 @@ INSTALL		= install
 all: cli tc
 
 install: all
-	m4 -D__libdir__=`echo $(libdir)` shsub.sh > shsub
-	$(INSTALL) -d $(bindir) $(libdir)/shsub $(mandir)/man1
-	$(INSTALL) cli tc $(libdir)/shsub/
+	m4 -D__libexecdir__=`echo $(libexecdir)` shsub.sh > shsub
+	$(INSTALL) -d $(bindir) $(libexecdir)/shsub $(mandir)/man1
+	$(INSTALL) cli tc $(libexecdir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
 	$(INSTALL) shsub $(bindir)/
 
