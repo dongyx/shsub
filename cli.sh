@@ -9,14 +9,13 @@
 
 set -e
 
-cleanup() {
+clean() {
 	[ -p "$fifo" ] && rm "$fifo"
 	if [ -n $tcpid ]; then
 		ppid="$(ps -p$tcpid -oppid | awk 'NR>1{print $1}')"
 		[ "$ppid" = $$ ] && kill "$ppid"
 	fi
 	wait
-	exit $1
 }
 
 preproc() {
@@ -53,9 +52,10 @@ if [ $# -gt 0 ]; then
 	fifo=$(mktemp -u)
 	mkfifo -m600 "$fifo"
 	<"$1" preproc | "$tc" >"$fifo" & tcpid=$!
-	trap "cleanup 0" EXIT
-	trap "cleanup $((128 + 15))" TERM
-	trap "cleanup $((128 + 2))" INT
+	trap clean EXIT
+	trap "exit $((128 + 15))" TERM
+	trap "exit $((128 + 2))" INT
+	trap "exit $((128 + 1))" HUP
 	"$sh" "$fifo"
 else
 	preproc | "$tc" | "$sh"
