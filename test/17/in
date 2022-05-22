@@ -1,0 +1,6 @@
+#!/usr/bin/env cli
+We've learnt:
+
+<% for i in "$@"; do -%>
+- <%= $i %>
+<% done -%>

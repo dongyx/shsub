@@ -54,11 +54,16 @@ If the first line of the shell template begins with
 \fB#!\fR (\fIshebang\fR), it will be ignored.
 This is for the convenience of making executable shell templates.
 
-.SH CAVEATS
+.SH READING INPUT
 
-When \fBshsub\fR reads from stdin,
-and the shell template contains commands reading from stdin,
-e.g. \fBread\fR(1), the behavior is unspecific.
+When the template is stdin,
+no argument will be passed to the shell template.
+If the shell template contains commands reading stdin,
+e.g. \fBread\fR(1), the behavior is unspecific
+
+When the shell template is a named file,
+all arguments after the file name are passed to the shell template
+and the template can safely read stdin.
 
 .SH OPTIONS
 

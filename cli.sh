@@ -52,11 +52,12 @@ if [ $# -gt 0 ]; then
 	fifo=$(mktemp -u)
 	mkfifo -m600 "$fifo"
 	<"$1" preproc | "$tc" >"$fifo" & tcpid=$!
+	shift
 	trap clean EXIT
 	trap "exit $((128 + 15))" TERM
 	trap "exit $((128 + 2))" INT
 	trap "exit $((128 + 1))" HUP
-	"$sh" "$fifo"
+	"$sh" "$fifo" "$@"
 else
 	preproc | "$tc" | "$sh"
 fi
