@@ -35,7 +35,7 @@ execute the following commands in the source tree:
 
 Building *shsub* requires:
 
-- `cc`(1): any C compiler which is compatible with *clang* or *gcc*
+- `cc`(1): any C compiler which is compatible with `clang` or `gcc`
 
 USAGE
 -----
