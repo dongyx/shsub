@@ -37,11 +37,6 @@ Building *shsub* requires:
 
 - `cc`(1): any C compiler which is compatible with *clang* or *gcc*
 
-- `m4`(1): the m4 macro processor
-
-They are all shipped with most Unix variants
-or can be installed from the package manager.
-
 USAGE
 -----
 
