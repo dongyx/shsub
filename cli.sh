@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -posix
 
 # the user interface of shsub <https:/github.com/dongyx/shsub>
 # piping the output of tc to shell
