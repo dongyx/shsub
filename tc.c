@@ -26,7 +26,7 @@ enum token {
 	END		/* EOF	*/
 };
 enum state { SERR, SINIT, STXT, SCMD, SEXP, STERM };
-enum state sttab[][8] = {
+enum state sttab[][6] = {
 /* in/st	  ERR	INIT	TXT	CMD	EXP	TERM	*/
 
 /* OPENCMD */	{ SERR,	SCMD,	SCMD,	SERR,	SERR,	SERR	},
@@ -69,7 +69,6 @@ main()
 	int trim;
 
 	trim = 0;
-	puts("set -e");
 	for (st = SINIT; st != STERM && st != SERR; st = next) {
 		in = gettok();
 		if (token[0] == '\n') {

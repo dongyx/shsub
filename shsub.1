@@ -57,14 +57,16 @@ This is for the convenience of making executable shell templates.
 .SH READING INPUT
 
 When the template is stdin,
-no argument will be passed to the template.
+no argument will be passed to the template
+and \fB$0\fR could be any value.
 If the template contains commands reading stdin,
 e.g. \fBread\fR(1), the behavior is unspecific.
 
 When the template is a named file,
-all arguments after the file name are passed to the template
-and the template can safely read stdin,
-but \fB$0\fR is unspecific.
+all arguments after the file name are passed to the template,
+and \fB$progname\fR is set to the template name.
+The template can safely read stdin.
+However, \fB$0\fR could still be any value.
 
 .SH OPTIONS
 

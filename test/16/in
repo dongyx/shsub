@@ -1,4 +1,4 @@
-#!/usr/bin/env cli
+#!/usr/bin/env shsub
 <%	foo=hello
 	bar=world
 	foobar=END

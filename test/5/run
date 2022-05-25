@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cli <in >/dev/null 2>anserr
-diff err anserr
+shsub <in >/dev/null 2>progerr
+diff err progerr

@@ -17,30 +17,33 @@ CFLAGS		= 	-std=c89 \
 all: cli tc
 
 install: all
+	@echo generate shsub
+	@>shsub
+	@>>shsub echo '#!/bin/sh'
+	@>>shsub echo export libexecdir=$(libexecdir)
+	@>>shsub echo export datadir=$(datadir)
+	@>>shsub echo exec $(libexecdir)/shsub/cli '"$$@"'
+	@chmod 755 shsub
 	$(INSTALL) -d \
 		$(bindir) \
 		$(libexecdir)/shsub \
 		$(datadir)/shsub \
 		$(mandir)/man1
 	$(INSTALL) cli tc $(libexecdir)/shsub/
-	>$(bindir)/shsub
-	>>$(bindir)/shsub echo '#!/bin/sh'
-	>>$(bindir)/shsub echo export libexecdir=$(libexecdir)
-	>>$(bindir)/shsub echo export datadir=$(datadir)
-	>>$(bindir)/shsub echo exec $(libexecdir)/shsub/cli '"$$@"'
-	chmod 755 $(bindir)/shsub
+	$(INSTALL) shsub $(bindir)/
 	$(INSTALL) -m644 usage version LICENSE $(datadir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
 
 test: all
 	@set -e; \
-	rm -rf testenv; \
+	rm -rf testenv testinst; \
+	make install prefix="`pwd`/testinst"; \
 	cp -R test testenv; \
 	for t in testenv/*; do \
 		echo running test $$t...; \
 		( \
-			PATH="`pwd`:$$PATH"; \
 			cd $$t; \
+			PATH="../../testinst/bin:$$PATH"; \
 			chmod +x run; \
 			./run \
 		); \
@@ -55,4 +58,4 @@ tc: tc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf cli tc testenv *.dSYM
+	rm -rf shsub cli tc testenv testinst *.dSYM

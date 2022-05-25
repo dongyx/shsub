@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cli in >ansout
-diff out ansout
+shsub in >progout
+diff out progout

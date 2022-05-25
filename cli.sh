@@ -18,6 +18,11 @@ if [ -n "$libexecdir" ]; then
 	tc="$libexecdir/shsub/tc"
 fi
 
+# shell escape
+shesc() {
+	printf %s "$1" | sed "s/'/'\\\\''/g; 1 s/^/'/; $ s/$/'/"
+}
+
 preproc() {
 	awk 'NR == 1 && /^#!/ { next } 1'	# ignore shebang
 }
@@ -43,19 +48,20 @@ while getopts 's:hv' opt; do
 	esac
 done
 shift $(($OPTIND - 1))
-
+trap "killchd; exit $((128 + 15))" TERM
+trap "killchd; exit $((128 + 2))" INT
+trap "killchd; exit $((128 + 1))" HUP
 exec 3>&0
 if [ $# -gt 0 ]; then
 	fifo="$(mktemp -u)"
 	mkfifo -m600 "$fifo"
 	trap '[ -p "$fifo" ] && rm "$fifo"' EXIT
-	<"$1" preproc | "$tc" >>"$fifo" &
+	{ printf 'set -e\n'
+	printf '%s\n' progname="`shesc "$1"`"
+	<"$1" preproc | "$tc" >>"$fifo"; } > "$fifo" &
 	shift
 	0>&3 "$sh" "$fifo" "$@" &
 else
 	0>&3 preproc | "$tc" | "$sh" &
 fi
-trap "killchd; exit $((128 + 15))" TERM
-trap "killchd; exit $((128 + 2))" INT
-trap "killchd; exit $((128 + 1))" HUP
 wait

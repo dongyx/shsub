@@ -1,5 +1,5 @@
 #!/bin/sh
 
 chmod +x in
-PATH=".:$PATH" ./in >ansout
-diff out ansout
+./in >progout
+diff out progout

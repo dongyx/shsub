@@ -28,8 +28,8 @@ the [release list](https://github.com/dongyx/shsub/releases).
 Unpack the tarball and
 execute the following commands in the source tree:
 
-	$ make
-	$ sudo make install
+	make test
+	sudo make install
 
 *shsub* is installed to `/usr/local` by default.
 
@@ -72,3 +72,13 @@ TEMPLATE SYNTAX
 
 - if the first line of the shell template begins with `#!` (*shebang*),
 it will be ignored
+
+UNINSTALLATION
+--------------
+
+For default installation in `/usr/local`:
+
+	sudo rm /usr/local/bin/shsub
+	sudo rm -r /usr/local/libexec/shsub/
+	sudo rm -r /usr/local/share/shsub/
+	sudo rm /usr/local/share/man/man1/shsub.1
