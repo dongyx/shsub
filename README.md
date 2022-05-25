@@ -20,6 +20,25 @@ The following file `lsnotes.html.st` is a simple shell template:
 Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
 your Markdown notes.
 
+TEMPLATE SYNTAX
+---------------
+
+- if the first line of the shell template begins with `#!` (*shebang*),
+it will be ignored
+
+- `<%`*cmd*`%>` is substituted with the output of *cmd*
+
+- `<%=`*expr*`%>` is substituted with the output of the command
+`printf %s "`*expr*`"`. 
+
+	Leading and trailing spaces, tabs, and newlines of *expr*
+	are removed.
+	Double quotes in *expr* are automatically escaped.
+
+- `-%>` can be used instead of `%>` to trim the following newline
+
+- `<%%` and `%%>` are escape tokens representing literal `<%` and `%>`
+
 INSTALLATION
 ------------
 
@@ -53,25 +72,6 @@ options:
 The detailed information is documented in the man page `shsub`(1)
 which is included in the installation.
 You could read it anytime by typing `man shsub`.
-
-TEMPLATE SYNTAX
----------------
-
-- `<%`*cmd*`%>` is substituted with the output of *cmd*
-
-- `<%=`*expr*`%>` is substituted with the output of the command
-`printf %s "`*expr*`"`. 
-
-	Leading and trailing spaces, tabs, and newlines of *expr*
-	are removed.
-	Double quotes in *expr* are automatically escaped.
-
-- `-%>` can be used instead of `%>` to trim the following newline
-
-- `<%%` and `%%>` are escape tokens representing literal `<%` and `%>`
-
-- if the first line of the shell template begins with `#!` (*shebang*),
-it will be ignored
 
 UNINSTALLATION
 --------------
