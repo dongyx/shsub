@@ -58,7 +58,7 @@ if [ $# -gt 0 ]; then
 	trap '[ -p "$fifo" ] && rm "$fifo"' EXIT
 	{ printf 'set -e\n'
 	printf '%s\n' progname="`shesc "$1"`"
-	<"$1" preproc | "$tc" >>"$fifo"; } > "$fifo" &
+	<"$1" preproc | "$tc"; } >"$fifo" &
 	shift
 	0>&3 "$sh" "$fifo" "$@" &
 else
