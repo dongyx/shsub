@@ -38,7 +38,8 @@ sh=/bin/sh
 while getopts 's:hv' opt; do
 	case $opt in
 		s)	sh="$OPTARG";;
-		h)	cat "$usage"; exit;;
+		h)	cat "$usage";
+			exit;;
 		v)	echo shsub "`cat "$version"`";
 			cat "$license";
 			exit;;
@@ -56,8 +57,7 @@ if [ $# -gt 0 ]; then
 	fifo="$(mktemp -u)"
 	mkfifo -m600 "$fifo"
 	trap '[ -p "$fifo" ] && rm "$fifo"' EXIT
-	{ printf 'set -e\n'
-	printf '%s\n' progname="`shesc "$1"`"
+	{ printf '%s\n' progname="`shesc "$1"`"
 	<"$1" preproc | "$tc"; } >"$fifo" &
 	shift
 	0>&3 "$sh" "$fifo" "$@" &
