@@ -12,7 +12,7 @@ tc="$dir/tc"
 if [ -n "$datadir" ]; then
 	usage="$datadir/shsub/usage"
 	version="$datadir/shsub/version"
-	license="$datadir/shsub/license"
+	license="$datadir/shsub/LICENSE"
 fi
 if [ -n "$libexecdir" ]; then
 	tc="$libexecdir/shsub/tc"
