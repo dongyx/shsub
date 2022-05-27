@@ -36,7 +36,7 @@ done
 shift $(($OPTIND - 1))
 
 script="$(mktemp)"
-trap '[ -p "$script" ] && rm "$script"' EXIT
+trap '[ -f "$script" ] && rm "$script"' EXIT
 trap 'exit 1' TERM INT HUP
 if [ $# -gt 0 ]; then
 	printf '%s\n' progname="`shesc "$1"`" >>"$script"
