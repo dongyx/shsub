@@ -2,7 +2,7 @@ shsub
 =====
 
 *shsub* is a template engine of the shell language,
-but mainly implemented in C.
+implemented in C and Shell.
 
 The following file `lsnotes.html.st` is a simple shell template:
 
@@ -23,21 +23,24 @@ your Markdown notes.
 TEMPLATE SYNTAX
 ---------------
 
+*shsub* compiles the template to a shell script and execute it.
+
 - if the first line of the shell template begins with `#!` (*shebang*),
 it will be ignored
 
-- `<%`*cmd*`%>` is substituted with the output of *cmd*
+- `<%`*cmd*`%>` is compiled to *cmd*
 
-- `<%=`*expr*`%>` is substituted with the output of the command
-`printf %s "`*expr*`"`. 
+- `<%=`*expr*`%>` is compiled to `printf %s "`*expr*`"`
 
 	Leading and trailing spaces, tabs, and newlines of *expr*
 	are removed.
 	Double quotes in *expr* are automatically escaped.
 
-- `-%>` can be used instead of `%>` to trim the following newline
+- `-%>` can be used instead of `%>` to ignore the following newline
 
-- `<%%` and `%%>` are escape tokens representing literal `<%` and `%>`
+- `<%%` and `%%>` are escaping tokens representing literal `<%` and `%>`
+
+- ordinary text is compiled to the command that prints the text
 
 INSTALLATION
 ------------
@@ -79,6 +82,5 @@ UNINSTALLATION
 For default installation in `/usr/local`:
 
 	sudo rm /usr/local/bin/shsub
-	sudo rm -r /usr/local/libexec/shsub/
-	sudo rm -r /usr/local/share/shsub/
+	sudo rm -r /usr/local/lib/shsub/
 	sudo rm /usr/local/share/man/man1/shsub.1
