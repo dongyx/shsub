@@ -2,16 +2,15 @@
 
 .SH NAME
 
-shsub - substitute embedded shell commands and expressions with their
-outputs and results
+shsub - compile the shell template to a shell script
+and execute it
 
 .SH SYNOPSIS
 
 \fBshsub\fR [\fIoptions\fR] [\fIfile\fR\]
 
 .PP
-\fBshsub\fR reads the shell template from \fIfile\fR,
-and prints the result to stdout.
+\fBshsub\fR reads the shell template from \fIfile\fR.
 If \fIfile\fR is omitted, \fBshsub\fR reads from stdin.
 
 .SH DESCRIPTION
@@ -22,32 +21,26 @@ with shell commands and expressions embedded in.
 
 .PP
 The shell commands are surrounded by \fB<%\fR and \fB%>\fR.
-
-.PP
-Each \fB<%\fIcmd\fB%>\fR is substituted
-with the output of the command.
-
-.PP
-Ordinary text is converted to the command printing that text,
-then the command is substituted by its output.
-Thus control structure can be used in shell commands.
+Each \fB<%\fIcmd\fB%>\fR is compiled to \fIcmd\fR.
 
 .PP
 The shell expressions are surrounded by \fB<%=\fR and \fB%>\fR.
-
-.PP
-Each \fB<%=\fIexpr\fB%>\fR is substituted with
-the output of the command \fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
-Leading and trailing spaces, tabs, and newlines of \fIexpr\fR are removed.
+Each \fB<%=\fIexpr\fB%>\fR is compiled to
+\fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
+Leading and trailing spaces, tabs, and newlines of \fIexpr\fR
+are removed.
 Double quotes in \fIexpr\fR are automatically escaped.
 
 .PP
-\fB<%%\fR and \fB%%>\fR are escape tokens representing
+Ordinary text is compiled to the command printing that text.
+
+.PP
+\fB<%%\fR and \fB%%>\fR are escaping tokens representing
 literal \fB<%\fR and \fB%>\fR.
 
 .PP
 If \fB-%>\fR is used instead of \fB%>\fR,
-\fBshsub\fR trims the following newline.
+\fBshsub\fR ignores the following newline.
 
 .PP
 If the first line of the shell template begins with
@@ -72,9 +65,10 @@ However, \fB$0\fR could still be any value.
 
 .TP
 \fB\-s\fR \fIshell\fR
-Set which shell is used.
+Set which shell is used to execute the compiled script.
 By default,
 \fBshsub\fR uses \fB/bin/sh\fR.
+Setting \fB-s cat\fR is a convenient way to examine the compiled script.
 
 .TP
 .B \-h
