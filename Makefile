@@ -1,11 +1,9 @@
 .PHONY: all install test clean
 
 prefix		=	/usr/local
-exec_prefix	=	$(prefix)
-bindir		=	$(exec_prefix)/bin
-libexecdir	=	$(exec_prefix)/libexec
+bindir		=	$(prefix)/bin
+libdir		=	$(prefix)/lib
 datarootdir	=	$(prefix)/share
-datadir		=	$(prefix)/share
 mandir		=	$(datarootdir)/man
 INSTALL		=	install
 CC		=	cc
@@ -17,22 +15,18 @@ CFLAGS		= 	-std=c89 \
 all: cli tc
 
 install: all
-	@echo generate shsub
-	@>shsub
-	@>>shsub echo '#!/bin/sh'
-	@>>shsub echo export libexecdir=$(libexecdir)
-	@>>shsub echo export datadir=$(datadir)
-	@>>shsub echo exec $(libexecdir)/shsub/cli '"$$@"'
-	@chmod 755 shsub
 	$(INSTALL) -d \
 		$(bindir) \
-		$(libexecdir)/shsub \
-		$(datadir)/shsub \
+		$(libdir)/shsub \
 		$(mandir)/man1
-	$(INSTALL) cli tc $(libexecdir)/shsub/
-	$(INSTALL) shsub $(bindir)/
-	$(INSTALL) -m644 usage version LICENSE $(datadir)/shsub/
+	$(INSTALL) cli tc $(libdir)/shsub/
+	$(INSTALL) -m644 usage version LICENSE $(libdir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
+	@echo generate "`echo $(bindir)/shsub`"
+	@>$(bindir)/shsub
+	@>>$(bindir)/shsub echo '#!/bin/sh'
+	@>>$(bindir)/shsub echo exec `echo $(libdir)/shsub/cli` '"$$@"'
+	@chmod 755 $(bindir)/shsub
 
 test: all
 	@set -e; \
@@ -58,4 +52,4 @@ tc: tc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf shsub cli tc testenv testinst *.dSYM
+	rm -rf cli tc testenv testinst *.dSYM
