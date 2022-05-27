@@ -1,4 +1,4 @@
-#!/bin/bash -posix
+#!/bin/sh
 
 # the user interface of shsub <https:/github.com/dongyx/shsub>
 # piping the output of tc to shell
@@ -9,14 +9,6 @@ usage="$dir/usage"
 version="$dir/version"
 license="$dir/LICENSE"
 tc="$dir/tc"
-if [ -n "$datadir" ]; then
-	usage="$datadir/shsub/usage"
-	version="$datadir/shsub/version"
-	license="$datadir/shsub/LICENSE"
-fi
-if [ -n "$libexecdir" ]; then
-	tc="$libexecdir/shsub/tc"
-fi
 
 # shell escape
 shesc() {
@@ -25,13 +17,6 @@ shesc() {
 
 preproc() {
 	awk 'NR == 1 && /^#!/ { next } 1'	# ignore shebang
-}
-
-killchd() {
-	ps -Aopid,ppid |
-	awk 'NR > 1 && $2 == "'$$'" { print $1 }' |
-	xargs kill 2>/dev/null
-	wait
 }
 
 sh=/bin/sh
@@ -49,19 +34,15 @@ while getopts 's:hv' opt; do
 	esac
 done
 shift $(($OPTIND - 1))
-trap "killchd; exit $((128 + 15))" TERM
-trap "killchd; exit $((128 + 2))" INT
-trap "killchd; exit $((128 + 1))" HUP
-exec 3>&0
+
+script="$(mktemp)"
+trap '[ -p "$script" ] && rm "$script"' EXIT
+trap 'exit 1' TERM INT HUP
 if [ $# -gt 0 ]; then
-	fifo="$(mktemp -u)"
-	mkfifo -m600 "$fifo"
-	trap '[ -p "$fifo" ] && rm "$fifo"' EXIT
-	{ printf '%s\n' progname="`shesc "$1"`"
-	<"$1" preproc | "$tc"; } >"$fifo" &
+	printf '%s\n' progname="`shesc "$1"`" >>"$script"
+	<"$1" preproc | "$tc"  >>"$script"
 	shift
-	0>&3 "$sh" "$fifo" "$@" &
 else
-	0>&3 preproc | "$tc" | "$sh" &
+	preproc | "$tc" >>"$script"
 fi
-wait
+"$sh" "$script" "$@"
