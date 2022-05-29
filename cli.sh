@@ -51,9 +51,13 @@ trap '[ -f "$script" ] && rm "$script"' EXIT
 trap 'exit 1' TERM INT HUP
 if [ $# -gt 0 ]; then
 	printf '%s\n' progname="`shesc "$1"`" >>"$script"
-	<"$1" preproc | "$tc" >>"$script"
+	if [ "$1" = - ]; then
+		preproc | "$tc" >>"$script"
+	else
+		<"$1" preproc | "$tc" >>"$script"
+	fi
 	shift
 else
 	preproc | "$tc" >>"$script"
 fi
-$sh "$script" "$@"
+"$sh" "$script" "$@"

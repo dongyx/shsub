@@ -31,9 +31,10 @@ install: all
 		cat LICENSE; \
 	) >>$(mandir)/man1/shsub.1
 	@echo generate "`echo $(bindir)/shsub`"
-	@>$(bindir)/shsub
-	@>>$(bindir)/shsub echo '#!/bin/sh'
-	@>>$(bindir)/shsub echo exec `echo $(libdir)/shsub/cli` '"$$@"'
+	@( \
+		echo '#!/bin/sh'; \
+		echo exec `echo $(libdir)/shsub/cli` '"$$@"'; \
+	) >$(bindir)/shsub
 	@chmod 755 $(bindir)/shsub
 
 test: all

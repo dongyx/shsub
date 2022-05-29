@@ -7,11 +7,11 @@ and execute it
 
 .SH SYNOPSIS
 
-\fBshsub\fR [\fIoptions\fR] [\fIfile\fR\]
+\fBshsub\fR [\fIoptions\fR] [\fIfile\fR\] [\fIargument\fR ...]
 
 .PP
 \fBshsub\fR reads the shell template from \fIfile\fR.
-If \fIfile\fR is omitted, \fBshsub\fR reads from stdin.
+If \fIfile\fR is \fB-\fR or omitted, \fBshsub\fR reads from stdin.
 
 .SH DESCRIPTION
 
@@ -49,17 +49,16 @@ This is for the convenience of making executable shell templates.
 
 .SH READING INPUT
 
-When the template is stdin,
-no argument will be passed to the template
-and \fB$0\fR could be any value.
-If the template contains commands reading stdin,
-e.g. \fBread\fR(1), the behavior is unspecific.
+Arguments are passed to the compiled script,
+but \fB$0\fR could be any value.
 
-When the template is a named file,
-all arguments after the file name are passed to the template,
-and \fB$progname\fR is set to the template name.
-The template can safely read stdin.
-However, \fB$0\fR could still be any value.
+The shell variable \fB$progname\fR is
+set to \fB-\fR if the template is read from stdin.
+Otherwise it's set to the template name.
+
+If the template is read from stdin
+and the the template itself reads stdin,
+the behavior is unspecific.
 
 .SH OPTIONS
 
