@@ -22,6 +22,14 @@ install: all
 	$(INSTALL) cli tc $(libdir)/shsub/
 	$(INSTALL) -m644 version LICENSE $(libdir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
+	@echo append version information to manpage
+	@( \
+		printf "\n%s\n\n" ".SH VERSION"; \
+		printf "shsub "; \
+		cat version; \
+		printf "\n"; \
+		cat LICENSE; \
+	) >>$(mandir)/man1/shsub.1
 	@echo generate "`echo $(bindir)/shsub`"
 	@>$(bindir)/shsub
 	@>>$(bindir)/shsub echo '#!/bin/sh'
