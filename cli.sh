@@ -5,10 +5,22 @@
 
 set -e
 dir=`dirname -- "$0"`
-usage="$dir/usage"
 version="$dir/version"
 license="$dir/LICENSE"
 tc="$dir/tc"
+
+help() {
+cat <<\.
+usage: shsub [<options>] [<file>]
+	if <file> is omitted, read from stdin.
+
+options:
+	-s <sh>	specify the shell to execute the compiled script,
+		`/bin/sh' by default
+	-h	print the brief usage
+	-v	print the version information
+.
+}
 
 # shell escape
 shesc() {
@@ -23,13 +35,12 @@ sh=/bin/sh
 while getopts 's:hv' opt; do
 	case $opt in
 		s)	sh="$OPTARG";;
-		h)	cat "$usage";
+		h)	help
 			exit;;
-		v)	echo shsub "`cat "$version"`";
-			cat "$license";
+		v)	echo shsub "`cat "$version"`"
+			cat "$license"
 			exit;;
-		?)	echo type \`shsub -h\' for the brief usage
-			echo 'read the man page shsub(1) for detail'
+		?)	help >&2
 			exit 1;;
 	esac
 done

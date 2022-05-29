@@ -20,7 +20,7 @@ install: all
 		$(libdir)/shsub \
 		$(mandir)/man1
 	$(INSTALL) cli tc $(libdir)/shsub/
-	$(INSTALL) -m644 usage version LICENSE $(libdir)/shsub/
+	$(INSTALL) -m644 version LICENSE $(libdir)/shsub/
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/
 	@echo generate "`echo $(bindir)/shsub`"
 	@>$(bindir)/shsub
