@@ -62,9 +62,9 @@ Building *shsub* requires:
 USAGE
 -----
 
-`shsub` \[*options*\] \[*file*\]
+`shsub` \[*options*\] \[*file*\] \[*argument* ...\]
 
-If *file* is omitted, `shsub` reads the template from stdin.
+If *file* is `-` or omitted, `shsub` reads the template from stdin.
 
 options:
 

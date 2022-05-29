@@ -9,21 +9,17 @@ and execute it
 
 \fBshsub\fR [\fIoptions\fR] [\fIfile\fR\] [\fIargument\fR ...]
 
-.PP
 \fBshsub\fR reads the shell template from \fIfile\fR.
 If \fIfile\fR is \fB-\fR or omitted, \fBshsub\fR reads from stdin.
 
 .SH DESCRIPTION
 
-.PP
 A shell template is text
 with shell commands and expressions embedded in.
 
-.PP
 The shell commands are surrounded by \fB<%\fR and \fB%>\fR.
 Each \fB<%\fIcmd\fB%>\fR is compiled to \fIcmd\fR.
 
-.PP
 The shell expressions are surrounded by \fB<%=\fR and \fB%>\fR.
 Each \fB<%=\fIexpr\fB%>\fR is compiled to
 \fBprintf %s \[dq]\fIexpr\fB\[dq]\fR.
@@ -31,18 +27,14 @@ Leading and trailing spaces, tabs, and newlines of \fIexpr\fR
 are removed.
 Double quotes in \fIexpr\fR are automatically escaped.
 
-.PP
 Ordinary text is compiled to the command printing that text.
 
-.PP
 \fB<%%\fR and \fB%%>\fR are escaping tokens representing
 literal \fB<%\fR and \fB%>\fR.
 
-.PP
 If \fB-%>\fR is used instead of \fB%>\fR,
 \fBshsub\fR ignores the following newline.
 
-.PP
 If the first line of the shell template begins with
 \fB#!\fR (\fIshebang\fR), it will be ignored.
 This is for the convenience of making executable shell templates.

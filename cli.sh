@@ -11,14 +11,16 @@ tc="$dir/tc"
 
 help() {
 cat <<\.
-usage: shsub [<options>] [<file>]
-	if <file> is omitted, read from stdin.
+usage: shsub [<options>] [<file>] [<argument> ...]
 
-options:
-	-s <sh>	specify the shell to execute the compiled script,
-		`/bin/sh' by default
-	-h	print the brief usage
-	-v	print the version information
+if <file> is `-' or omitted, read from stdin.
+
+options
+
+-s <sh>	specify the shell to execute the compiled script,
+	`/bin/sh' by default
+-h	print the brief usage
+-v	print the version information
 .
 }
 
