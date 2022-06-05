@@ -30,7 +30,17 @@ shesc() {
 }
 
 preproc() {
-	awk 'NR == 1 && /^#!/ { next } 1'	# ignore shebang
+	awk '
+		# replace shebang with a placeholder
+		# to align line numbers after preprocessing
+		NR == 1 && /^#!/ {
+			print "<% -%>"
+			next
+		}
+		{
+			print
+		}
+	'
 }
 
 sh=/bin/sh
