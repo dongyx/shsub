@@ -7,14 +7,14 @@ implemented in C and Shell.
 The following file `lsnotes.html.st` is a simple shell template:
 
 	<ul>
-		<% for i in notes/*.md; do -%>
-			<% title=`grep '^# ' "$i" | head -n1` -%>
-			<% if [ -n "$title" ]; then -%>
-				<li>
-					<%= $title %>
-				</li>
-			<% fi -%>
-		<% done -%>
+	<% for i in notes/*.md; do -%>
+	<% 	title=`grep '^# ' "$i" | head -n1` -%>
+	<% 	if [ -n "$title" ]; then -%>
+		<li>
+			<%=$title %>
+		</li>
+	<%	fi -%>
+	<% done -%>
 	</ul>
 
 Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
