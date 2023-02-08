@@ -1,7 +1,7 @@
-shsub
+Shsub
 =====
 
-*shsub* is a template engine of the shell language,
+*Shsub* is a template engine of the shell language,
 implemented in C and Shell.
 
 The following file `lsnotes.html.st` is a simple shell template:
@@ -20,10 +20,10 @@ The following file `lsnotes.html.st` is a simple shell template:
 Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
 your Markdown notes.
 
-TEMPLATE SYNTAX
+Template Syntax
 ---------------
 
-*shsub* compiles the template to a shell script and execute it.
+The `shsub` program compiles the template to a shell script and execute it.
 
 - if the first line of the shell template begins with `#!` (*shebang*),
 it will be ignored
@@ -42,7 +42,7 @@ it will be ignored
 
 - ordinary text is compiled to the command that prints the text
 
-INSTALLATION
+Installation
 ------------
 
 Download the source tarball of the latest version from
@@ -53,13 +53,13 @@ execute the following commands in the source tree:
 	make test
 	sudo make install
 
-*shsub* is installed to `/usr/local` by default.
+Shsub is installed to `/usr/local` by default.
 
-Building *shsub* requires:
+Building Shsub requires:
 
 - `cc`(1): any C compiler which is compatible with `clang` or `gcc`
 
-USAGE
+Usage
 -----
 
 `shsub` \[*options*\] \[*file*\] \[*argument* ...\]
@@ -77,7 +77,7 @@ The detailed information is documented in the man page `shsub`(1)
 which is included in the installation.
 You could read it anytime by typing `man shsub`.
 
-UNINSTALLATION
+Uninstallation
 --------------
 
 For default installation in `/usr/local`:
