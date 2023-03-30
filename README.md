@@ -1,7 +1,7 @@
-Shsub
+shsub
 =====
 
-*Shsub* is a template engine of the shell language,
+`shsub` is a template engine of the shell language,
 implemented in C and Shell.
 
 The following file `lsnotes.html.st` is a simple shell template:
@@ -53,9 +53,9 @@ execute the following commands in the source tree:
 	make test
 	sudo make install
 
-Shsub is installed to `/usr/local` by default.
+`shsub` is installed to `/usr/local` by default.
 
-Building Shsub requires:
+Building `shsub` requires:
 
 - `cc`(1): any C compiler which is compatible with `clang` or `gcc`
 
