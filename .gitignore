@@ -1,7 +1,6 @@
+/shsub
+/shsub.1
 .DS_Store
+*.tmp
 *.dSYM
 *.swp
-/cli
-/tc
-/testenv
-/testinst

@@ -1,0 +1,3 @@
+#!/bin/sh
+shsub <letter.tpl >letter.tmp
+diff -u letter.out letter.tmp

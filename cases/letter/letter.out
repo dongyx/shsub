@@ -1,0 +1,10 @@
+                              A Letter from Shsub
+Hi, dear user:
+	Shsub is a template engine of the shell language, implemented in C.
+	
+	**Key Features**
+	
+	- Fast template compiling;
+	- Low memory footprint;
+	- Light-weight, containing only a standalone executable.
+                                                               - Shsub Developer

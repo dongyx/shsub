@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+pwd="$(pwd)"
+PATH="$pwd:$PATH"
+for test in cases/*; do
+	echo Testing "$test"...
+	cd "$test"
+	chmod +x run
+	./run
+	cd "$pwd"
+done
+echo All tests passed

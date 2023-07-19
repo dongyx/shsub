@@ -1,5 +1,0 @@
-#!/bin/sh
-
-chmod +x in
-./in >progout
-diff out progout

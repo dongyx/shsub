@@ -1,4 +1,0 @@
-#!/bin/sh
-
-shsub <in >/dev/null 2>progerr
-diff err progerr

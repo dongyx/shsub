@@ -1,0 +1,3 @@
+#!/bin/sh
+shsub lexhack.tpl >lexhack.tmp
+diff -u lexhack.out lexhack.tmp

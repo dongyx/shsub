@@ -1,1 +1,0 @@
-<% read foo bar %><%=$(echo $foo, $bar)%>

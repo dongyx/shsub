@@ -1,4 +1,0 @@
-#!/bin/sh
-
-shsub <in >progout
-diff out progout

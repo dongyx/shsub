@@ -1,4 +1,0 @@
-#!/bin/sh
-
-echo hello world | shsub in >progout
-diff out progout

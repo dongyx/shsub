@@ -1,87 +1,97 @@
-shsub
+Shsub
 =====
 
-`shsub` is a template engine of the shell language,
-implemented in C and Shell.
+Shsub is a template engine of the shell language,
+implemented in C.
 
-The following file `lsnotes.html.st` is a simple shell template:
+The following file `notes.html.tpl` demonstrates a simple template:
 
 	<ul>
-	<% for i in notes/*.md; do -%>
-	<% 	title=`grep '^# ' "$i" | head -n1` -%>
-	<% 	if [ -n "$title" ]; then -%>
-		<li>
-			<%=$title %>
-		</li>
-	<%	fi -%>
-	<% done -%>
+	<%for i in notes/*.md; do-%>
+	<%	title="$(grep '^# ' "$i" | head -n1)"-%>
+		<li><%="$title"%></li>
+	<%done-%>
 	</ul>
 
-Running `shsub lsnotes.html.st` prints a HTML list reporting titles of
-your Markdown notes.
+Calling `shsub notes.html.tpl`
+prints a HTML list reporting titles of your Markdown notes.
+
+**Key Features**
+
+- Fast template compiling;
+- Low memory footprint;
+- Light-weight, containing only a standalone executable.
 
 Template Syntax
 ---------------
 
-The `shsub` program compiles the template to a shell script and execute it.
+- Shell commands are surrounded by `<%` and `%>` and
+are compiled to the commands themselves;
 
-- if the first line of the shell template begins with `#!` (*shebang*),
-it will be ignored
+- Shell expressions are surrounded by `<%=` and `%>` and each `<%=expr%>` is compiled to `printf %s expr`;
 
-- `<%`*cmd*`%>` is compiled to *cmd*
+- Ordinary text is compiled to the command printing that text;
 
-- `<%=`*expr*`%>` is compiled to `printf %s "`*expr*`"`
+- A template can include other templates by `<%+filename%>`;
 
-	Leading and trailing spaces, tabs, and newlines of *expr*
-	are removed.
-	Double quotes in *expr* are automatically escaped.
+- If `-%>` is used instead of `%>`,
+the following newline character will be ignored;
 
-- `-%>` can be used instead of `%>` to ignore the following newline
-
-- `<%%` and `%%>` are escaping tokens representing literal `<%` and `%>`
-
-- ordinary text is compiled to the command that prints the text
+- `<%%` and `%%>` are compiled to literal `<%` and `%>`.
 
 Installation
 ------------
 
-Download the source tarball of the latest version from
-the [release list](https://github.com/dongyx/shsub/releases).
-Unpack the tarball and
-execute the following commands in the source tree:
+It would be better to select a version from the
+[release page](https://github.com/dongyx/shsub/releases)
+than downloading the working code,
+unless you understand the status of the working code.
+The latest stable release is always recommended.
 
-	make test
-	sudo make install
+	$ make
+	$ sudo make install
 
-`shsub` is installed to `/usr/local` by default.
+By default, Shsub is installed to `/usr/local`.
+You could call `shsub --version` to check the installation.
 
-Building `shsub` requires:
+Further Documentation
+---------------------
 
-- `cc`(1): any C compiler which is compatible with `clang` or `gcc`
+Calling Shsub with `--help` prints a brief of the command-line options.
+The complete description is documented in the man page shipped with the installation.
 
-Usage
------
+The implementation is explained in the [paper](https://www.dyx.name/notes/shsub-impl.html).
+If you attempt to contribute to this project, it may help.
 
-`shsub` \[*options*\] \[*file*\] \[*argument* ...\]
+Migrating from 1.x
+------------------
 
-If *file* is `-` or omitted, `shsub` reads the template from stdin.
+The breaking changes of Shsub 2.0.0 are:
 
-options:
+- The special treatment for shebang comments are deprecated;
+If an executable is required,
+compile the template to a shell script using the `-c` option;
 
-- `-s` *sh*	specify the shell to execute the compiled script,
-	`/bin/sh` by default
-- `-h`	print the brief usage
-- `-v`	print the version information
+- Expressions are no longer automatically quoted and escaped;
 
-The detailed information is documented in the man page `shsub`(1)
-which is included in the installation.
-You could read it anytime by typing `man shsub`.
+- The `progname` environment variable is no longer set;
+If the template needs to use `$0`,
+compile it to a shell script using the `-c` option;
 
-Uninstallation
---------------
+To make parallel installations of Shsub 1.x and the later version,
+use the `name` installation variable:
 
-For default installation in `/usr/local`:
+	sudo make install name=shsub2
 
-	sudo rm /usr/local/bin/shsub
-	sudo rm -r /usr/local/lib/shsub/
-	sudo rm /usr/local/share/man/man1/shsub.1
+This will install with the name `shsub2`
+instead of the default `shsub`.
+Both the executable and the man page will use the specified name.
+
+Credits
+-------
+
+Shsub is created by [DONG Yuxuan](https://www.dyx.name) in 2022.
+
+The syntax is inspired by
+Jakub Jirutka's [ESH](https://github.com/jirutka/esh)
+whose syntax is based on ERB (Embedded Ruby).

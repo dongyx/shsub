@@ -1,6 +1,0 @@
-#!/usr/bin/env shsub
-We've learnt from <%=$progname%>:
-
-<% for i in "$@"; do -%>
-- <%= $i %>
-<% done -%>
