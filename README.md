@@ -22,6 +22,15 @@ prints a HTML list reporting titles of your Markdown notes.
 - Low memory footprint;
 - Light-weight, containing only a standalone executable.
 
+**Table of Contents**
+
+- [Template Syntax](#template-syntax)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Migrating from 1.x](#migrating-from-1x)
+- [Following News](#following-news)
+- [Credits](#credits)
+
 Template Syntax
 ---------------
 
@@ -54,8 +63,8 @@ The latest stable release is always recommended.
 By default, Shsub is installed to `/usr/local`.
 You could call `shsub --version` to check the installation.
 
-Further Documentation
----------------------
+Documentation
+-------------
 
 Calling Shsub with `--help` prints a brief of the command-line options.
 The complete description is documented in the man page shipped with the installation.
@@ -86,6 +95,12 @@ use the `name` installation variable:
 This will install with the name `shsub2`
 instead of the default `shsub`.
 Both the executable and the man page will use the specified name.
+
+Following News
+--------------
+
+- <https://www.dyx.name>
+- [Twitter](https://twitter.com/dongyx2)
 
 Credits
 -------
