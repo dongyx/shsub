@@ -68,7 +68,7 @@ Migrating from 1.x
 
 The breaking changes of Shsub 2.0.0 are:
 
-- The special treatment for shebang comments are deprecated;
+- The special treatment for shebang comments is deprecated;
 If an executable is required,
 compile the template to a shell script using the `-c` option;
 
