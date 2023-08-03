@@ -194,17 +194,20 @@ int cpop(FILE *fp)
 
 void tmpl(FILE *in, FILE *ou)
 {
+	char *p;
+
 	while (lookahead != END)
 		switch (lookahead) {
 		case INCL:
 			match(INCL, in);
 			if (lookahead != LITERAL)
 				parserr("Expect included filename");
-			if (!(tmplname = strdup(literal)))
+			if (!(p = strdup(literal)))
 				syserr();
 			match(LITERAL, in);
 			match(CLOSE, in);
 			ipush(in);
+			tmplname = p;
 			if (!(in = fopen(tmplname, "r")))
 				err("%s: %s",
 					tmplname, strerror(errno));
@@ -308,7 +311,7 @@ void rmscr(void)
 void version(void)
 {
 	fputs(
-	"Shsub 2.0.0\n"
+	"Shsub 2.0.1\n"
 	"Project Homepage: <https://github.com/dongyx/shsub>\n"
 	"Copyright (c) 2022 DONG Yuxuan <https://www.dyx.name>\n"
 	, stdout);
