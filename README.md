@@ -105,8 +105,11 @@ Following News
 Credits
 -------
 
-Shsub is created by [DONG Yuxuan](https://www.dyx.name) in 2022.
+Shsub was created by [DONG Yuxuan](https://www.dyx.name) in 2022.
 
-The syntax is inspired by
+[Chris Wellons (*skeeto*)](https://nullprogram.com) reviewed the code
+and gave useful advice.
+
+The syntax of Shsub is inspired by
 Jakub Jirutka's [ESH](https://github.com/jirutka/esh)
 whose syntax is based on ERB (Embedded Ruby).
