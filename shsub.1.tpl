@@ -50,7 +50,7 @@ Set the path of the output script if \fB-c\fR is enabled
 
 .SH AUTHORS
 
-Shsub is originally created by
+Shsub was created by
 DONG Yuxuan <https://www.dyx.name> in 2022.
 
 .SH FURTHER DOCUMENTATION
