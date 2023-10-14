@@ -24,10 +24,12 @@ Shell expressions are surrounded by \fB<%%=\fR and \fB%%>\fR.
 Shell commands are compiled to the commands themselves.
 Each \fB<%%=\fIexpr\fB%%>\fR is compiled to \fBprintf %s \fIexpr\fR.
 Ordinary text is compiled to the command printing that text.
+Contents within \fB<%%!\fR and \fB%%>\fR are regarded as comments
+and are ignored.
 A template can include other templates by \fB<%%+\fIfilename\fB%%>\fR.
 
 If \fB-%%>\fR is used instead of \fB%%>\fR
-to end a command, expression, or including,
+to end a command, expression, including, or comment,
 the following newline character will be ignored.
 \fB<%%%\fR and \fB%%%>\fR are compiled to literal \fB<%%\fR and \fB%%>\fR.
 
