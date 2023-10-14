@@ -135,13 +135,14 @@ enum token gettoken(FILE *fp)
 		h = cpop(fp);
 		r = cpop(fp);
 		if (c == '<' && h == '%') {
-			kw = CMDOPEN;
 			if (r == '=')
 				kw = EXPOPEN;
 			else if (r == '+')
 				kw = INCL;
 			else if (r == '%')
 				kw = ESCOPEN;
+			else
+				kw = CMDOPEN;
 		} else if (c == '%' && h == '>')
 			kw = CLOSE;
 		else if (c == '%' && h == '%' && r == '>')
