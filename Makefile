@@ -24,4 +24,4 @@ test: all
 	./test
 
 clean:
-	rm -rf shsub shsub.1
+	rm -rf shsub shsub.1 *.dSYM
