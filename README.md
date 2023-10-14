@@ -1,8 +1,7 @@
 Shsub
 =====
 
-Shsub is a template engine of the shell language,
-implemented in C.
+Shsub is a fast template engine for Shell.
 
 The following file `notes.html.tpl` demonstrates a simple template:
 
@@ -18,9 +17,9 @@ prints a HTML list reporting titles of your Markdown notes.
 
 **Key Features**
 
-- Fast template compiling;
-- Low memory footprint;
-- Light-weight, containing only a standalone executable.
+- Fast: One-pass parser written in C;
+- Low memory footprint: No dynamic allocation;
+- Light-weight: Standalone executable.
 
 **Table of Contents**
 
@@ -34,12 +33,16 @@ prints a HTML list reporting titles of your Markdown notes.
 Template Syntax
 ---------------
 
-- Shell commands are surrounded by `<%` and `%>` and
-are compiled to the commands themselves;
+- Shell commands are surrounded by `<%` and `%>`
+and are compiled to the commands themselves;
 
-- Shell expressions are surrounded by `<%=` and `%>` and each `<%=expr%>` is compiled to `printf %s expr`;
+- Shell expressions are surrounded by `<%=` and `%>`
+and each `<%=expr%>` is compiled to `printf %s expr`;
 
-- Ordinary text is compiled to the command printing that text;
+- Ordinary text is compiled to the commands printing that text;
+
+- Template comments are surrounded by `<%!` and `%>`
+and are ignored;
 
 - A template can include other templates by `<%+filename%>`;
 
