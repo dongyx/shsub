@@ -15,6 +15,7 @@ enum token {
 	INCL,
 	CMDOPEN,
 	EXPOPEN,
+	COMOPEN,
 	CLOSE,
 	ESCOPEN,
 	ESCCLOSE,
@@ -139,6 +140,8 @@ enum token gettoken(FILE *fp)
 				kw = EXPOPEN;
 			else if (r == '+')
 				kw = INCL;
+			else if (r == '!')
+				kw = COMOPEN;
 			else if (r == '%')
 				kw = ESCOPEN;
 			else
@@ -163,6 +166,7 @@ enum token gettoken(FILE *fp)
 		cpush(c);
 		return LITERAL;
 	}
+	/* push back a char if the token is 2-char */
 	if (kw == CMDOPEN || kw == CLOSE && !trim)
 		cpush(r);
 	if (trim && (c = cpop(fp)) != '\n')
@@ -234,6 +238,11 @@ void tmpl(FILE *in, FILE *ou)
 			fputc('\n', ou);
 			match(CLOSE, in);
 			break;
+		case COMOPEN:
+			match(COMOPEN, in);
+			text(-1, in, ou);
+			match(CLOSE, in);
+			break;
 		case LITERAL:
 		case ESCOPEN:
 		case ESCCLOSE:
@@ -253,22 +262,25 @@ void text(int esc, FILE *in, FILE *ou)
 	for (;;)
 		switch(lookahead) {
 		case LITERAL:
-			if (!esc)
+			if (esc == 0)
 				fputs(literal, ou);
-			else
-				for (s = literal; *s; ++s)
+			else if (esc == 1)
+				for (s = literal; *s; ++s) {
 					if (*s == '\'')
 						fputs("'\\''", ou);
 					else
 						fputc(*s, ou);
+				}
 			match(LITERAL, in);
 			break;
 		case ESCOPEN:
-			fputs("<%", ou);
+			if (esc >= 0)
+				fputs("<%", ou);
 			match(ESCOPEN, in);
 			break;
 		case ESCCLOSE:
-			fputs("%>", ou);
+			if (esc >= 0)
+				fputs("%>", ou);
 			match(ESCCLOSE, in);
 			break;
 		default:
