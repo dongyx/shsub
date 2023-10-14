@@ -48,7 +48,6 @@ void help(void);
 void err(char *fmt, ...);
 void parserr(char *fmt, ...);
 void syserr(void);
-void verr(char *fmt, va_list ap);
 
 int main(int argc, char **argv)
 {
@@ -348,7 +347,10 @@ void err(char *fmt, ...)
 
 	fprintf(stderr, "%s: ", progname);
 	va_start(ap, fmt);
-	verr(fmt, ap);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+	fputc('\n', stderr);
+	exit(-1);
 }
 
 void parserr(char *fmt, ...)
@@ -361,18 +363,14 @@ void parserr(char *fmt, ...)
 	else
 		fprintf(stderr, "%s: line %d: ", progname, lineno);
 	va_start(ap, fmt);
-	verr(fmt, ap);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+	fputc('\n', stderr);
+	exit(-1);
 }
 
 void syserr(void)
 {
 	perror(progname);
-	exit(-1);
-}
-
-void verr(char *fmt, va_list ap)
-{
-	vfprintf(stderr, fmt, ap);
-	fputc('\n', stderr);
 	exit(-1);
 }
