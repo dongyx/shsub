@@ -111,5 +111,4 @@ Shsub was created by [DONG Yuxuan](https://www.dyx.name) in 2022.
 and gave useful advice.
 
 The syntax of Shsub is inspired by
-Jakub Jirutka's [ESH](https://github.com/jirutka/esh)
-whose syntax is based on ERB (Embedded Ruby).
+Jakub Jirutka's [ESH](https://github.com/jirutka/esh).
