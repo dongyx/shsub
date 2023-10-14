@@ -24,8 +24,9 @@ enum token {
 
 struct iframe {
 	FILE *in;
-	int lookahead, cstack[3], *csp, lineno;
 	char *tmplname;
+	int cstack[3], *csp, lineno;
+	enum token lookahead;
 } istack[MAXINCL], *isp = istack;
 
 char *progname, *tmplname, script[] = "/tmp/shsub.XXXXXX";
@@ -194,7 +195,7 @@ int cpop(FILE *fp)
 
 void tmpl(FILE *in, FILE *ou)
 {
-	char *p;
+	char incl[MAXLITR];
 
 	while (lookahead != END)
 		switch (lookahead) {
@@ -202,21 +203,22 @@ void tmpl(FILE *in, FILE *ou)
 			match(INCL, in);
 			if (lookahead != LITERAL)
 				parserr("Expect included filename");
-			if (!(p = strdup(literal)))
-				syserr();
+			strcpy(incl, literal);
 			match(LITERAL, in);
 			match(CLOSE, in);
 			ipush(in);
-			tmplname = p;
+			tmplname = incl;
 			if (!(in = fopen(tmplname, "r")))
-				err("%s: %s",
-					tmplname, strerror(errno));
+				err(
+					"%s: %s",
+					tmplname,
+					strerror(errno)
+				);
 			lineno = 1;
 			csp = cstack;
 			lookahead = gettoken(in);
 			tmpl(in, ou);
 			fclose(in);
-			free(tmplname);
 			in = ipop();
 			break;
 		case CMDOPEN:
@@ -232,7 +234,9 @@ void tmpl(FILE *in, FILE *ou)
 			fputc('\n', ou);
 			match(CLOSE, in);
 			break;
-		case LITERAL: case ESCOPEN: case ESCCLOSE:
+		case LITERAL:
+		case ESCOPEN:
+		case ESCCLOSE:
 			fputs("printf %s '", ou);
 			text(1, in, ou);
 			fputs("'\n", ou);
