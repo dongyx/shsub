@@ -1,6 +1,8 @@
 /shsub
 /shsub.1
 .DS_Store
+/fuzz
+/lint
 *.tmp
 *.dSYM
 *.swp

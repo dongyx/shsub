@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <limits.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -123,7 +124,7 @@ enum token gettoken(FILE *fp)
 
 	p = literal;
 	while (kw == END) {
-		while (p - literal < MAXLITR - 1) {
+		while (p != literal + MAXLITR - 1) {
 			if ((c = cpop(fp)) == EOF || strchr("<%-", c ))
 				break;
 			*p++ = c;
@@ -167,7 +168,7 @@ enum token gettoken(FILE *fp)
 		return LITERAL;
 	}
 	/* push back a char if the token is 2-char */
-	if (kw == CMDOPEN || kw == CLOSE && !trim)
+	if (kw == CMDOPEN || (kw == CLOSE && !trim))
 		cpush(r);
 	if (trim && (c = cpop(fp)) != '\n')
 		cpush(c);
@@ -327,7 +328,7 @@ void rmscr(void)
 void version(void)
 {
 	fputs(
-	"Shsub 2.0.1\n"
+	"Shsub 2.1.0\n"
 	"Project Homepage: <https://github.com/dongyx/shsub>\n"
 	"Copyright (c) 2022 DONG Yuxuan <https://www.dyx.name>\n"
 	, stdout);
@@ -363,7 +364,7 @@ void err(char *fmt, ...)
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	fputc('\n', stderr);
-	exit(-1);
+	exit(1);
 }
 
 void parserr(char *fmt, ...)
@@ -379,11 +380,11 @@ void parserr(char *fmt, ...)
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	fputc('\n', stderr);
-	exit(-1);
+	exit(1);
 }
 
 void syserr(void)
 {
 	perror(progname);
-	exit(-1);
+	exit(1);
 }

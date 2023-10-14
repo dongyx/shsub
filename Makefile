@@ -1,4 +1,4 @@
-.PHONY: all install test clean
+.PHONY: all install test clean lint fuzz
 
 name		=	shsub
 prefix		=	/usr/local
@@ -24,4 +24,30 @@ test: all
 	./test
 
 clean:
-	rm -rf shsub shsub.1 *.dSYM
+	rm -rf shsub shsub.1 *.dSYM lint fuzz
+
+lint:
+	@rm -rf lint
+	@mkdir -p lint
+	@cp Makefile *.c lint
+	@cd lint && make 'CFLAGS= \
+	-std=c89 \
+	-D_POSIX_C_SOURCE=200809L \
+	-pedantic-errors \
+	-Wextra \
+	-Wno-error'
+
+fuzz:
+	@rm -rf fuzz
+	@mkdir -p fuzz
+	@cp -r Makefile *.c cases test fuzz
+	@cd fuzz && make test \
+	'CFLAGS= \
+	-std=c89 \
+	-D_POSIX_C_SOURCE=200809L \
+	-pedantic-errors \
+	-Wextra \
+	-Wno-error \
+	-O3 \
+	-fno-sanitize-recover \
+	-fsanitize=address,undefined'
