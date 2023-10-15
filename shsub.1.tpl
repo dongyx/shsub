@@ -57,4 +57,4 @@ DONG Yuxuan <https://www.dyx.name> in 2022.
 
 .SH FURTHER DOCUMENTATION
 
-See the project homepage <https://github.com/dongyx/shsub>.
+See <https://github.com/dongyx/shsub>.

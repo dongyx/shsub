@@ -78,9 +78,9 @@ If you attempt to contribute to this project, it may help.
 Migrating from 1.x
 ------------------
 
-The breaking changes of Shsub 2.0.0 are:
+The breaking changes since Shsub 2.0.0 are:
 
-- The special treatment for shebang comments is deprecated;
+- Shebang comments are no longer supported;
 If an executable is required,
 compile the template to a shell script using the `-c` option;
 

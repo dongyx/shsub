@@ -167,7 +167,7 @@ enum token gettoken(FILE *fp)
 		cpush(c);
 		return LITERAL;
 	}
-	/* push back a char if the token is 2-char */
+	/* push back a char if the token is a 2-char keyword*/
 	if (kw == CMDOPEN || (kw == CLOSE && !trim))
 		cpush(r);
 	if (trim && (c = cpop(fp)) != '\n')
@@ -328,8 +328,7 @@ void rmscr(void)
 void version(void)
 {
 	fputs(
-	"Shsub 2.1.0\n"
-	"Project Homepage: <https://github.com/dongyx/shsub>\n"
+	"Shsub 2.1.1 <https://github.com/dongyx/shsub>\n"
 	"Copyright (c) 2022 DONG Yuxuan <https://www.dyx.name>\n"
 	, stdout);
 	exit(0);
