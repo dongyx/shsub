@@ -11,7 +11,9 @@ CC		=	cc
 all: shsub
 
 install: all
-	name='$(name)' ./shsub shsub.1.tpl >shsub.1
+	name='$(name)' \
+	version=$$(./shsub --version | head -n1 | awk '{print $$2}') \
+	./shsub shsub.1.tpl >shsub.1
 	mkdir -p $(bindir) $(mandir)/man1
 	$(INSTALL) shsub $(bindir)/$(name)
 	$(INSTALL) -m644 shsub.1 $(mandir)/man1/$(name).1

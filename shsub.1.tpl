@@ -55,6 +55,10 @@ Set the path of the output script if \fB-c\fR is enabled
 Shsub was created by
 DONG Yuxuan <https://www.dyx.name> in 2022.
 
+.SH VERSION
+
+This man page is for Shsub <%="$version"%>.
+
 .SH FURTHER DOCUMENTATION
 
 See <https://github.com/dongyx/shsub>.
