@@ -17,7 +17,7 @@ prints a HTML list reporting titles of your Markdown notes.
 
 **Key Features**
 
-- Fast: One-pass parser written in C;
+- Fast: One-pass compiler written in C;
 - Low memory footprint: No dynamic allocation;
 - Light-weight: Standalone executable.
 
