@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+shsub -c -s /bin/sh echo.tpl >echo.sh.tmp
+sh echo.sh.tmp 1 2 3 >echo.tmp
+diff -u echo.out echo.tmp

@@ -31,7 +31,7 @@ struct iframe {
 	enum token lookahead;
 } istack[MAXINCL], *isp = istack;
 
-char *progname, *tmplname, script[] = "/tmp/shsub.XXXXXX";
+char *progname, *tmplname, *script;
 enum token lookahead;
 int cstack[3], *csp = cstack, lineno = 1;
 char literal[MAXLITR];
@@ -53,9 +53,10 @@ void syserr(void);
 
 int main(int argc, char **argv)
 {
+	char *sh = "/bin/sh", tmp[] = "/tmp/shsub.XXXXXX";
+	int fd, op, exe = 1;
 	FILE *in, *out;
-	char *sh = "/bin/sh", *target = NULL;
-	int fd, op, noexe = 0;
+	struct stat st;
 
 	progname = argv[0];
 	if (argc > 1) {
@@ -66,53 +67,61 @@ int main(int argc, char **argv)
 	}
 	while ((op = getopt(argc, argv, "s:co:")) != -1)
 		switch (op) {
-		case 's': sh = optarg; break;
-		case 'c': noexe = 1; break;
-		case 'o': target = optarg; break;
-		case '?': err("Call with `--help` for usage");
+		case 's':
+			sh = optarg;
+			break;
+		case 'c':
+			exe = 0;
+			break;
+		case 'o':
+			script = optarg;
+			break;
+		default:
+			err("Call with `--help` for usage");
 		}
 	argc -= optind;
 	argv += optind;
-	in = stdin;
 	if (argc > 0) {
 		tmplname = argv[0];
 		if (!(in = fopen(tmplname = argv[0], "r")))
 			err("%s: %s", tmplname, strerror(errno));
-	}
-	lookahead = gettoken(in);
-	if (noexe) {
-		if (target) {
-			if ((fd = open(
-				target,
-				O_CREAT|O_WRONLY|O_TRUNC,
-				0755
-			)) == -1)
-				syserr();
-			if (!(out = fdopen(fd, "w")))
-				syserr();
-		} else
-			out = stdout;
-		fprintf(out, "#!%s\n", sh);
-		tmpl(in, out);
-		if (fclose(out) == EOF)
+	} else
+		in = stdin;
+	if (exe) {
+		if ((fd = mkstemp(script = tmp)) == -1)
 			syserr();
-		return 0;
-	}
-	if ((fd = mkstemp(script)) == -1 || atexit(rmscr))
-		syserr();
-	if (!(out = fdopen(fd, "w")))
-		syserr();
-	fprintf(out, "#!%s\nrm %s\n", sh, script);
+		if (atexit(rmscr) == -1)
+			syserr();
+	} else if (script) {
+		if ((fd = open(script, O_CREAT|O_WRONLY|O_TRUNC, 0744))
+			== -1
+		)
+			syserr();
+	} else
+		fd = 1;
+	if (fd != 1) {
+		if (fstat(fd, &st) == -1)
+			syserr();
+		if (fchmod(fd, st.st_mode|0111) == -1)
+			syserr();
+		if (!(out = fdopen(fd, "w")))
+			syserr();
+	} else
+		out = stdout;
+	fprintf(out, "#!%s\n", sh);
+	if (exe)
+		fprintf(out, "rm %s\n", script);
+	lookahead = gettoken(in);
 	tmpl(in, out);
-	if (fchmod(fd, S_IRWXU) == -1)
-		syserr();
 	if (fclose(out))
 		syserr();
-	if (argc > 0)
-		execv(script, argv);
-	else
-		execl(script, "-", NULL);
-	syserr();
+	if (exe) {
+		if (argc > 0)
+			execv(script, argv);
+		else
+			execl(script, "-", NULL);
+		syserr();
+	}
 	return 0;
 }
 
@@ -292,14 +301,14 @@ void text(int esc, FILE *in, FILE *ou)
 void match(enum token tok, FILE *fp)
 {
 	if (lookahead != tok)
-		parserr("Lack of expected token");
+		parserr("Unexpected token");
 	lookahead = gettoken(fp);
 }
 
 void ipush(FILE *in)
 {
 	if (isp == istack + MAXINCL)
-		err("Including too deep");
+		err("Too deep including");
 	isp->lookahead = lookahead;
 	memcpy(isp->cstack, cstack, sizeof cstack);
 	isp->csp = csp;
