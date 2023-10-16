@@ -3,7 +3,7 @@ Shsub
 
 Shsub is a fast template engine for Shell.
 
-The following file `notes.html.tpl` demonstrates a simple template:
+The following file `notes.tpl` demonstrates a simple template:
 
 	<ul>
 	<%for i in notes/*.md; do-%>
@@ -12,8 +12,10 @@ The following file `notes.html.tpl` demonstrates a simple template:
 	<%done-%>
 	</ul>
 
-Calling `shsub notes.html.tpl`
-prints a HTML list reporting titles of your Markdown notes.
+The following command prints a HTML list
+reporting titles of your Markdown notes.
+
+	$ shsub notes.tpl
 
 **Key Features**
 
