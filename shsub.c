@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
-#define MAXLITR 4096
+#define MAXTOKEN 4096
 #define MAXINCL 64
 
 enum token {
@@ -34,7 +34,7 @@ struct iframe {
 char *progname, *tmplname, *script;
 enum token lookahead;
 int cstack[3], *csp = cstack, lineno = 1;
-char literal[MAXLITR];
+char token[MAXTOKEN];
 
 enum token gettoken(FILE *fp);
 int cpush(int c);
@@ -125,9 +125,9 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-/* This routine also sets the `literal` global variable.
- * If the token is `LITERAL`, `literal` is set to the content.
- * Otherwise, `literal` is set to the NULL-terminated empty string.
+/* This routine also sets the `token` global variable.
+ * If the token is `LITERAL`, `token` is set to the content.
+ * Otherwise, `token` is set to the NULL-terminated empty string.
  */
 enum token gettoken(FILE *fp)
 {
@@ -135,17 +135,17 @@ enum token gettoken(FILE *fp)
 	int c, h, r, trim = 0;
 	enum token kw = END;
 
-	p = literal;
+	p = token;
 	while (kw == END) {
-		while (p != literal + MAXLITR - 1) {
+		while (p != token + MAXTOKEN - 1) {
 			if ((c = cpop(fp)) == EOF || strchr("<%-", c ))
 				break;
 			*p++ = c;
 		}
 		*p = '\0';
 		if (c == EOF)
-			return p > literal ? LITERAL : END;
-		if (p == literal + MAXLITR - 1)
+			return p > token ? LITERAL : END;
+		if (p == token + MAXTOKEN - 1)
 			return LITERAL;
 		h = cpop(fp);
 		r = cpop(fp);
@@ -174,15 +174,19 @@ enum token gettoken(FILE *fp)
 			*p = '\0';
 		}
 	}
-	if (p > literal) {
+	if (p > token) {
 		cpush(r);
 		cpush(h);
 		cpush(c);
 		return LITERAL;
 	}
-	/* push back a char if the token is a 2-char keyword*/
+	*p++ = c;
+	*p++ = h;
+	*p++ = r;
+	/* push back a char if the token is a 2-char keyword */
 	if (kw == CMDOPEN || (kw == CLOSE && !trim))
-		cpush(r);
+		cpush(*--p);
+	*p = '\0';
 	if (trim && (c = cpop(fp)) != '\n')
 		cpush(c);
 	return kw;
@@ -213,13 +217,13 @@ int cpop(FILE *fp)
 
 void tmpl(FILE *in, FILE *ou)
 {
-	char incl[MAXLITR];
+	char incl[MAXTOKEN];
 
 	while (lookahead != END)
 		switch (lookahead) {
 		case INCL:
 			match(INCL, in);
-			strcpy(incl, literal);
+			strcpy(incl, token);
 			match(LITERAL, in);
 			match(CLOSE, in);
 			ipush(in);
@@ -263,7 +267,7 @@ void tmpl(FILE *in, FILE *ou)
 			fputs("'\n", ou);
 			break;
 		default:
-			parserr("Unexpected token");
+			parserr("Unexpected token: %s", token);
 		}
 }
 
@@ -275,9 +279,9 @@ void text(int esc, FILE *in, FILE *ou)
 		switch(lookahead) {
 		case LITERAL:
 			if (esc == 0)
-				fputs(literal, ou);
+				fputs(token, ou);
 			else if (esc == 1)
-				for (s = literal; *s; ++s) {
+				for (s = token; *s; ++s) {
 					if (*s == '\'')
 						fputs("'\\''", ou);
 					else
@@ -306,7 +310,7 @@ void match(enum token tok, FILE *fp)
 		if (lookahead == END)
 			parserr("Unexpected end");
 		else
-			parserr("Unexpected token");
+			parserr("Unexpected token: %s", token);
 	}
 	lookahead = gettoken(fp);
 }
@@ -343,7 +347,7 @@ void rmscr(void)
 void version(void)
 {
 	fputs(
-	"Shsub 2.1.1 <https://github.com/dongyx/shsub>\n"
+	"Shsub 2.1.2 <https://github.com/dongyx/shsub>\n"
 	"Copyright (c) 2022 DONG Yuxuan <https://www.dyx.name>\n"
 	, stdout);
 	exit(0);
