@@ -1,4 +1,4 @@
-.PHONY: all install test clean lint fuzz
+.PHONY: all install test clean lint fuzz debug
 
 name		=	shsub
 prefix		=	/usr/local
@@ -7,6 +7,7 @@ datarootdir	=	$(prefix)/share
 mandir		=	$(datarootdir)/man
 INSTALL		=	install
 CC		=	cc
+DBG		=	lldb
 
 all: shsub
 
@@ -26,7 +27,8 @@ test: all
 	./test
 
 clean:
-	rm -rf shsub shsub.1 *.dSYM lint fuzz
+	rm -rf shsub shsub.1 *.dSYM lint fuzz debug
+	find cases -name '*.tmp' | xargs rm
 
 lint:
 	@rm -rf lint
@@ -53,3 +55,14 @@ fuzz:
 	-O3 \
 	-fno-sanitize-recover \
 	-fsanitize=address,undefined'
+
+debug:
+	@rm -rf debug
+	@mkdir -p debug
+	@cp Makefile *.c debug
+	@cd debug && make 'CFLAGS= \
+	-Wextra \
+	-Wno-error \
+	-g \
+	-O0'
+	$(DBG) debug/shsub
