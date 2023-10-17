@@ -125,6 +125,10 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+/* This routine also sets the `literal` global variable.
+ * If the token is `LITERAL`, `literal` is set to the content.
+ * Otherwise, `literal` is set to the NULL-terminated empty string.
+ */
 enum token gettoken(FILE *fp)
 {
 	char *p;
@@ -215,8 +219,6 @@ void tmpl(FILE *in, FILE *ou)
 		switch (lookahead) {
 		case INCL:
 			match(INCL, in);
-			if (lookahead != LITERAL)
-				parserr("Expect included filename");
 			strcpy(incl, literal);
 			match(LITERAL, in);
 			match(CLOSE, in);
@@ -300,8 +302,12 @@ void text(int esc, FILE *in, FILE *ou)
 
 void match(enum token tok, FILE *fp)
 {
-	if (lookahead != tok)
-		parserr("Unexpected token");
+	if (lookahead != tok) {
+		if (lookahead == END)
+			parserr("Unexpected end");
+		else
+			parserr("Unexpected token");
+	}
 	lookahead = gettoken(fp);
 }
 
