@@ -125,10 +125,6 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-/* This routine also sets the `token` global variable.
- * If the token is `LITERAL`, `token` is set to the content.
- * Otherwise, `token` is set to the NULL-terminated empty string.
- */
 enum token gettoken(FILE *fp)
 {
 	char *p;
